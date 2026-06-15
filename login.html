@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – SAYWEE</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Noto Sans KR',sans-serif;min-height:100vh;}
+    .wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+    @media(max-width:768px){.wrap{grid-template-columns:1fr;}.left{display:none!important;}}
+    .left{
+      background:linear-gradient(145deg,#0d0500 0%,#3d1200 35%,#7a2800 65%,#c44400 85%,#e86000 100%);
+      display:flex;align-items:center;justify-content:center;
+      padding:48px;position:relative;overflow:hidden;
+    }
+    .left-bg{position:absolute;font-size:260px;opacity:.06;line-height:1;pointer-events:none;user-select:none;top:50%;left:50%;transform:translate(-50%,-50%);}
+    .left-content{position:relative;z-index:1;color:white;text-align:center;}
+    .brand{font-size:28px;font-weight:900;letter-spacing:-1px;color:white;text-decoration:none;display:block;margin-bottom:28px;}
+    .brand em{background:#0D2DBD;color:white;padding:3px 10px;border-radius:8px;margin-left:3px;font-style:normal;}
+    .left-content h2{font-size:clamp(20px,2.5vw,32px);font-weight:800;line-height:1.3;margin-bottom:10px;}
+    .left-content p{opacity:.65;font-size:14px;margin-bottom:40px;}
+    .stats{display:flex;gap:32px;justify-content:center;}
+    .stats div{text-align:center;}
+    .stats .n{font-size:26px;font-weight:900;}
+    .stats .l{font-size:11px;opacity:.55;margin-top:4px;}
+    /* Right */
+    .right{display:flex;align-items:center;justify-content:center;padding:48px 32px;background:#fff;}
+    .box{width:100%;max-width:420px;}
+    .box-brand{font-size:22px;font-weight:900;letter-spacing:-1px;color:#111;text-decoration:none;display:block;margin-bottom:32px;}
+    .box-brand em{background:#0D2DBD;color:white;padding:2px 8px;border-radius:6px;margin-left:2px;font-style:normal;}
+    /* Tabs */
+    .tabs{display:flex;border-bottom:1px solid #eee;margin-bottom:28px;}
+    .tab{flex:1;padding:12px;text-align:center;font-size:14px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;color:#bbb;transition:all .2s;}
+    .tab.on{color:#111;border-bottom-color:#111;}
+    .panel{display:none;}
+    .panel.on{display:block;}
+    /* Form */
+    .field{margin-bottom:14px;}
+    .field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#444;text-transform:uppercase;letter-spacing:.04em;}
+    .field input{
+      width:100%;padding:12px 16px;
+      border:1.5px solid #e8e8e8;border-radius:8px;
+      font-size:14px;font-family:inherit;outline:none;
+      transition:border-color .2s;background:#fff;color:#111;
+    }
+    .field input:focus{border-color:#111;}
+    .field input.err{border-color:#ff4444;background:#fff8f8;}
+    .btn{
+      width:100%;padding:14px;border:none;border-radius:8px;
+      font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;
+      transition:all .2s;
+    }
+    .btn-yellow{background:#F8E400;color:#111;}
+    .btn-yellow:hover{background:#111;color:#fff;}
+    .btn-dark{background:#111;color:#fff;margin-top:8px;}
+    .btn-dark:hover{background:#333;}
+    .btn-red{background:#fff5f5;color:#cc0000;border:1.5px solid #ffcccc;margin-top:8px;}
+    .btn-red:hover{background:#ffebeb;}
+    .divider{text-align:center;position:relative;margin:20px 0;}
+    .divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:#eee;}
+    .divider span{position:relative;background:#fff;padding:0 12px;font-size:12px;color:#bbb;}
+    .socials{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+    .btn-social{padding:11px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;font-family:inherit;transition:background .2s;}
+    .btn-social:hover{background:#f5f5f5;}
+    .hint{text-align:center;font-size:13px;color:#999;margin-top:20px;}
+    .hint a{font-weight:700;color:#111;text-decoration:none;}
+    .forgot{text-align:right;margin-bottom:18px;}
+    .forgot a{font-size:12px;color:#bbb;text-decoration:none;}
+    /* Account panel */
+    .acc{text-align:center;padding:8px 0;}
+    .acc-avatar{
+      width:80px;height:80px;border-radius:50%;
+      background:#F8E400;display:flex;align-items:center;justify-content:center;
+      font-size:32px;font-weight:900;margin:0 auto 16px;color:#111;
+    }
+    .acc-name{font-size:22px;font-weight:800;margin-bottom:4px;}
+    .acc-email{color:#999;font-size:14px;margin-bottom:28px;}
+    .acc-links{display:flex;flex-direction:column;gap:8px;}
+    .acc-link{
+      display:block;padding:13px 16px;border-radius:10px;
+      font-size:14px;font-weight:700;text-align:center;
+      text-decoration:none;transition:opacity .2s;
+    }
+    .acc-link:hover{opacity:.8;}
+    .acc-link.yellow{background:#F8E400;color:#111;}
+    .acc-link.gray{background:#f7f3e8;color:#111;border:1px solid #e8e3d8;}
+  </style>
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+
+<div class="wrap">
+  <!-- LEFT -->
+  <div class="left">
+    <div class="left-bg">🍜</div>
+    <div class="left-content">
+      <a href="index.html" class="brand">SAY<em>WEE</em></a>
+      <h2>아시아의 맛을<br>집에서 즐기세요</h2>
+      <p>7개국의 정통 아시아 식품을 한 곳에서</p>
+      <div class="stats">
+        <div><div class="n">7</div><div class="l">Countries</div></div>
+        <div><div class="n">500+</div><div class="l">Products</div></div>
+        <div><div class="n">50K+</div><div class="l">Customers</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="box" id="box">
+
+      <!-- ── Chưa đăng nhập: Hiện form ── -->
+      <div id="form-section">
+        <a href="index.html" class="box-brand">SAY<em>WEE</em></a>
+
+        <div class="tabs">
+          <div class="tab on" id="tab-login">로그인</div>
+          <div class="tab" id="tab-register">회원가입</div>
+        </div>
+
+        <!-- Login -->
+        <div class="panel on" id="panel-login">
+          <p style="font-size:14px;color:#999;margin-bottom:20px;">계정에 로그인하여 주문 및 위시리스트를 관리하세요.</p>
+          <div class="field">
+            <label>이메일</label>
+            <input type="email" id="li-email" placeholder="you@example.com">
+          </div>
+          <div class="field">
+            <label>비밀번호</label>
+            <input type="password" id="li-pw" placeholder="••••••••">
+          </div>
+          <div class="forgot"><a href="#">비밀번호를 잊으셨나요?</a></div>
+          <button class="btn btn-yellow" id="do-login">로그인</button>
+          <div class="divider"><span>또는</span></div>
+          <div class="socials">
+            <button class="btn-social" onclick="socialMsg()">G &nbsp;Google</button>
+            <button class="btn-social" onclick="socialMsg()">f &nbsp;Facebook</button>
+          </div>
+          <p class="hint">계정이 없으신가요? <a href="#" id="go-reg">회원가입하기</a></p>
+        </div>
+
+        <!-- Register -->
+        <div class="panel" id="panel-register">
+          <p style="font-size:14px;color:#999;margin-bottom:20px;">새 계정을 만들어 더 편리하게 쇼핑하세요.</p>
+          <div class="field">
+            <label>이름</label>
+            <input type="text" id="rg-name" placeholder="홍길동">
+          </div>
+          <div class="field">
+            <label>이메일</label>
+            <input type="email" id="rg-email" placeholder="you@example.com">
+          </div>
+          <div class="field">
+            <label>비밀번호 <span style="color:#bbb;font-weight:400;font-size:11px;">(최소 6자)</span></label>
+            <input type="password" id="rg-pw" placeholder="••••••••">
+          </div>
+          <div class="field" style="margin-bottom:20px;">
+            <label>비밀번호 확인</label>
+            <input type="password" id="rg-pw2" placeholder="••••••••">
+          </div>
+          <button class="btn btn-yellow" id="do-register">회원가입</button>
+          <p class="hint">이미 계정이 있으신가요? <a href="#" id="go-login">로그인하기</a></p>
+        </div>
+      </div>
+
+      <!-- ── Đã đăng nhập: Hiện account panel ── -->
+      <div id="acc-section" style="display:none;">
+        <a href="index.html" class="box-brand">SAY<em>WEE</em></a>
+        <div class="acc">
+          <div class="acc-avatar" id="acc-avatar">?</div>
+          <div class="acc-name" id="acc-name">이름</div>
+          <div class="acc-email" id="acc-email">email</div>
+          <div class="acc-links">
+            <a href="index.html" class="acc-link yellow">🏠 홈으로 가기</a>
+            <a href="shop.html" class="acc-link gray">🛒 쇼핑 계속하기</a>
+            <a href="wishlist.html" class="acc-link gray">♡ 위시리스트</a>
+            <a href="cart.html" class="acc-link gray">🛒 장바구니</a>
+            <!-- ★ LOGOUT BUTTON ★ -->
+            <button class="btn btn-red" id="do-logout" style="width:100%;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px;">
+              🚪 로그아웃
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/language.js"></script>
+<script src="js/products.js"></script>
+<script src="js/script.js"></script>
+<script>
+// ─────────────────────────────────────────────────────────
+// Toast helper
+function toast(msg, type) {
+  if (typeof showToast === 'function') { showToast(msg, type); return; }
+  var d = document.createElement('div');
+  d.textContent = msg;
+  d.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#111;color:#fff;padding:14px 20px;border-radius:10px;z-index:9999;font-size:14px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.2)';
+  document.body.appendChild(d);
+  setTimeout(function(){ d.style.opacity='0'; d.style.transition='opacity .3s'; setTimeout(function(){ d.remove(); },300); }, 2800);
+}
+function socialMsg() { toast('소셜 로그인은 준비 중입니다 😊', 'warning'); }
+
+// ─────────────────────────────────────────────────────────
+// Kiểm tra trạng thái đăng nhập và hiện đúng panel
+function checkLoginState() {
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem('saywee_user') || 'null'); } catch(e) {}
+
+  if (user) {
+    // Đã đăng nhập → hiện account panel
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('acc-section').style.display  = 'block';
+    document.getElementById('acc-avatar').textContent = user.name.charAt(0).toUpperCase();
+    document.getElementById('acc-name').textContent   = user.name;
+    document.getElementById('acc-email').textContent  = user.email || '';
+  } else {
+    // Chưa đăng nhập → hiện form
+    document.getElementById('form-section').style.display = 'block';
+    document.getElementById('acc-section').style.display  = 'none';
+  }
+}
+
+// Chạy ngay khi trang load
+checkLoginState();
+
+// ─────────────────────────────────────────────────────────
+// Tab switching
+document.getElementById('tab-login').onclick = function() {
+  this.className = 'tab on';
+  document.getElementById('tab-register').className = 'tab';
+  document.getElementById('panel-login').className = 'panel on';
+  document.getElementById('panel-register').className = 'panel';
+};
+document.getElementById('tab-register').onclick = function() {
+  this.className = 'tab on';
+  document.getElementById('tab-login').className = 'tab';
+  document.getElementById('panel-register').className = 'panel on';
+  document.getElementById('panel-login').className = 'panel';
+};
+document.getElementById('go-reg').onclick   = function(e){ e.preventDefault(); document.getElementById('tab-register').click(); };
+document.getElementById('go-login').onclick = function(e){ e.preventDefault(); document.getElementById('tab-login').click(); };
+
+// ─────────────────────────────────────────────────────────
+// LOGIN
+document.getElementById('do-login').onclick = function() {
+  var email = document.getElementById('li-email').value.trim();
+  var pw    = document.getElementById('li-pw').value;
+  // Reset
+  document.getElementById('li-email').className = 'field input'.split(' ')[1] || '';
+  if (!email) { toast('이메일을 입력해주세요', 'warning'); document.getElementById('li-email').focus(); return; }
+  if (!pw)    { toast('비밀번호를 입력해주세요', 'warning'); document.getElementById('li-pw').focus(); return; }
+  if (typeof Auth === 'undefined') { toast('잠시 후 다시 시도해주세요', 'warning'); return; }
+  if (!Auth.login(email, pw)) {
+    toast('이메일 또는 비밀번호가 틀렸습니다', 'error');
+    document.getElementById('li-pw').value = '';
+    document.getElementById('li-pw').focus();
+  } else {
+    toast('로그인 완료! 🎉', 'success');
+    setTimeout(function(){ window.location.href = 'index.html'; }, 900);
+  }
+};
+document.getElementById('li-pw').onkeydown = function(e){ if(e.key==='Enter') document.getElementById('do-login').click(); };
+document.getElementById('li-email').onkeydown = function(e){ if(e.key==='Enter') document.getElementById('li-pw').focus(); };
+
+// ─────────────────────────────────────────────────────────
+// REGISTER
+document.getElementById('do-register').onclick = function() {
+  var name = document.getElementById('rg-name').value.trim();
+  var email= document.getElementById('rg-email').value.trim();
+  var pw   = document.getElementById('rg-pw').value;
+  var pw2  = document.getElementById('rg-pw2').value;
+  if (!name)           { toast('이름을 입력해주세요', 'warning'); return; }
+  if (!email)          { toast('이메일을 입력해주세요', 'warning'); return; }
+  if (pw.length < 6)   { toast('비밀번호는 최소 6자리입니다', 'warning'); return; }
+  if (pw !== pw2)      { toast('비밀번호가 일치하지 않습니다', 'error'); return; }
+  if (typeof Auth === 'undefined') { toast('잠시 후 다시 시도해주세요', 'warning'); return; }
+  if (!Auth.register(name, email, pw)) {
+    toast('이미 사용 중인 이메일입니다', 'error');
+  } else {
+    toast('회원가입 완료! 환영합니다 🎉', 'success');
+    setTimeout(function(){ window.location.href = 'index.html'; }, 900);
+  }
+};
+
+// ─────────────────────────────────────────────────────────
+// LOGOUT
+document.getElementById('do-logout').onclick = function() {
+  localStorage.removeItem('saywee_user');
+  toast('로그아웃 되었습니다', '');
+  setTimeout(function(){ checkLoginState(); }, 500);
+};
+</script>
+</body>
+</html>

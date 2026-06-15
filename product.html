@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product – SAYWEE</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style id="brand-blue-override">
+/* SAYWEE Weee-style blue override */
+:root { --brand-green: #0D2DBD !important; --brand-green-dark: #0a1f8f !important; }
+.logo-brand { color: #0D2DBD !important; }
+.btn-primary, .add-to-cart-btn, .buy-now-btn { background: #0D2DBD !important; }
+a.btn-primary:hover, .btn-primary:hover { background: #0a1f8f !important; }
+.header { border-bottom: 3px solid #0D2DBD !important; }
+.hero-slider .slide-indicator.active { background: #0D2DBD !important; }
+.product-card-img img { object-fit: cover; width: 100%; height: 100%; }
+.hero-slide img { object-fit: cover; width: 100%; height: 100%; }
+</style>
+
+</head>
+<body>
+<div id="page-loader" class="page-loader"><div class="loader-logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div></div>
+<div id="toast-container" class="toast-container"></div>
+
+<!-- HEADER -->
+<header id="site-header">
+  <div class="header-inner">
+    <div class="header-logo"><a href="index.html">SAY<span style="background:#0D2DBD;color:white;">WEE</span></a></div>
+    <nav class="header-nav">
+      <ul>
+        <li><a href="index.html" data-lang="nav_home">홈</a></li>
+        <li><a href="shop.html" data-lang="nav_shop">쇼핑</a></li>
+        <li><a href="shop.html" data-lang="nav_countries">국가별</a></li>
+        <li><a href="blog.html" data-lang="nav_blog">블로그</a></li>
+        <li><a href="about.html" data-lang="nav_about">소개</a></li>
+        <li><a href="contact.html" data-lang="nav_contact">문의</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="header-btn" id="search-btn">🔍</button>
+      <div class="lang-switcher">
+        <button class="lang-btn">🇰🇷 KR</button>
+        <div class="lang-dropdown">
+          <div class="lang-option active" data-lang="ko">🇰🇷 한국어</div>
+          <div class="lang-option" data-lang="en">🇺🇸 English</div>
+          <div class="lang-option" data-lang="vi">🇻🇳 Tiếng Việt</div>
+          <div class="lang-option" data-lang="ja">🇯🇵 日本語</div>
+          <div class="lang-option" data-lang="zh">🇨🇳 中文</div>
+        </div>
+      </div>
+      <a href="wishlist.html" class="header-btn">♡<span class="badge wishlist-badge" style="display:none">0</span></a>
+      <a href="login.html" class="header-btn login-link">👤</a>
+      <a href="cart.html" class="header-btn">🛒<span class="badge cart-badge" style="display:none">0</span></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div id="mobile-menu" class="mobile-menu">
+  <div class="mobile-menu-inner">
+    <ul>
+      <li><a href="index.html" data-lang="nav_home">홈</a></li>
+      <li><a href="shop.html" data-lang="nav_shop">쇼핑</a></li>
+      <li><a href="about.html" data-lang="nav_about">소개</a></li>
+      <li><a href="contact.html" data-lang="nav_contact">문의</a></li>
+    </ul>
+  </div>
+</div>
+<div id="search-overlay" class="search-overlay">
+  <div style="width:100%;max-width:680px;margin:0 auto;padding:0 20px;">
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Search products...">
+      <button class="search-submit" onclick="document.getElementById('search-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="search-results-dropdown" id="search-results"></div>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <div class="product-info-breadcrumb" style="padding-top:24px">
+      <a href="index.html">Home</a> ›
+      <a href="shop.html">Shop</a> ›
+      <span id="breadcrumb-category">Category</span> ›
+      <span id="breadcrumb-name">Product</span>
+    </div>
+
+    <!-- Product Layout -->
+    <div class="product-detail-layout">
+
+      <!-- Gallery -->
+      <div class="product-gallery">
+        <div class="gallery-main">
+          <img id="gallery-main-img" src="https://images.unsplash.com/photo-1547592180-85f173990554?w=800" alt="Product">
+        </div>
+        <div class="gallery-thumbs" id="gallery-thumbs">
+          <div class="gallery-thumb active" style="display:flex;align-items:center;justify-content:center;background:var(--secondary);font-size:28px;">
+            <img id="thumb-0" src="" alt="thumb" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.3s;" onload="this.style.opacity=1" onerror="this.style.display='none'">
+          </div>
+          <div class="gallery-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--secondary);font-size:28px;">
+            <img id="thumb-1" src="" alt="thumb" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.3s;" onload="this.style.opacity=1" onerror="this.style.display='none'">
+          </div>
+          <div class="gallery-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--secondary);font-size:28px;">
+            <img id="thumb-2" src="" alt="thumb" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.3s;" onload="this.style.opacity=1" onerror="this.style.display='none'">
+          </div>
+          <div class="gallery-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--secondary);font-size:28px;">
+            <img id="thumb-3" src="" alt="thumb" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.3s;" onload="this.style.opacity=1" onerror="this.style.display='none'">
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-info">
+        <div id="detail-badges" class="product-info-badges"></div>
+
+        <h1 class="product-info-title" id="product-title">Loading...</h1>
+
+        <div class="product-info-meta">
+          <span>🏷 <span data-lang="brand">브랜드</span>: <strong id="product-brand">–</strong></span>
+          <span>🌏 <span data-lang="origin">원산지</span>: <strong id="product-country">–</strong></span>
+          <span>📦 <span data-lang="weight">중량</span>: <strong id="product-weight">–</strong></span>
+        </div>
+
+        <!-- Rating -->
+        <div class="product-info-rating">
+          <span class="rating-big" id="rating-big">0</span>
+          <div>
+            <div class="rating-stars-big" id="rating-stars-big">★★★★★</div>
+            <div class="rating-info" id="rating-count-big">0 reviews</div>
+          </div>
+        </div>
+
+        <!-- Social Proof -->
+        <div class="social-proof">
+          <div class="proof-item">🔥 <strong id="proof-viewing">–</strong></div>
+          <div class="proof-item">🛒 <strong id="proof-cart">–</strong></div>
+          <div class="proof-item">📦 <strong id="proof-sold">–</strong></div>
+          <div class="proof-item">♡ <strong id="proof-wishlist">–</strong></div>
+        </div>
+
+        <!-- Price -->
+        <div class="product-price-section">
+          <div class="product-price-current" id="product-price">$0.00</div>
+          <div class="product-price-meta">
+            <span class="product-price-original" id="product-price-original" style="display:none"></span>
+            <span class="product-price-save" id="product-price-save" style="display:none"></span>
+          </div>
+        </div>
+
+        <!-- Quantity -->
+        <div class="quantity-selector">
+          <button class="qty-btn" id="qty-minus">−</button>
+          <input class="qty-input" type="number" value="1" min="1" id="qty-input">
+          <button class="qty-btn" id="qty-plus">+</button>
+        </div>
+
+        <!-- Purchase Buttons -->
+        <div class="purchase-buttons">
+          <button class="btn-add-cart" id="btn-add-cart">
+            🛒 <span data-lang="add_cart">장바구니에 담기</span>
+          </button>
+          <button class="btn-buy-now" id="btn-buy-now">
+            ⚡ <span data-lang="buy_now">바로 구매</span>
+          </button>
+        </div>
+        <button class="btn-wishlist" id="btn-wishlist">
+          <span>♡ <span data-lang="add_wish">위시리스트에 추가</span></span>
+        </button>
+
+        <!-- Delivery Info -->
+        <div class="delivery-info">
+          <div class="delivery-item">
+            <div class="delivery-item-icon">🚚</div>
+            <div class="delivery-item-text">
+              <strong data-lang="shipping_fee">배송비</strong>
+              <span id="d-shipping" data-lang="shipping_fee_val">₩3,000 (₩50,000 이상 무료)</span>
+            </div>
+          </div>
+          <div class="delivery-item">
+            <div class="delivery-item-icon">📅</div>
+            <div class="delivery-item-text">
+              <strong data-lang="delivery_time">배송 기간</strong>
+              <span data-lang="delivery_time_val">2-5 영업일</span>
+            </div>
+          </div>
+          <div class="delivery-item">
+            <div class="delivery-item-icon">🔄</div>
+            <div class="delivery-item-text">
+              <strong data-lang="return_policy">반품 정책</strong>
+              <span data-lang="return_policy_val">수령 후 7일 이내</span>
+            </div>
+          </div>
+          <div class="delivery-item">
+            <div class="delivery-item-icon">💰</div>
+            <div class="delivery-item-text">
+              <strong data-lang="refund_policy">환불 정책</strong>
+              <span data-lang="refund_policy_val">미개봉 제품 전액 환불</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="product-tabs">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-desc" data-lang="tab_description">상품 설명</button>
+        <button class="tab-btn" data-tab="tab-nutrition" data-lang="tab_nutrition">영양 정보</button>
+        <button class="tab-btn" data-tab="tab-reviews" data-lang="tab_reviews">리뷰</button>
+        <button class="tab-btn" data-tab="tab-qa" data-lang="tab_qa">Q&A</button>
+      </div>
+
+      <!-- Description Tab -->
+      <div class="tab-panel active" id="tab-desc">
+        <div style="max-width:680px">
+          <h3 style="font-size:20px;font-weight:700;margin-bottom:16px" data-lang="tab_description">상품 설명</h3>
+          <p style="font-size:15px;color:var(--text-light);line-height:1.9" id="product-description">Loading...</p>
+
+          <div style="margin-top:32px;display:grid;grid-template-columns:repeat(2,1fr);gap:24px">
+            <div>
+              <h4 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px" data-lang="ingredients">원재료</h4>
+              <p style="font-size:14px;color:var(--text-light)" id="product-ingredients">–</p>
+            </div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px" data-lang="allergens">알레르기</h4>
+              <p style="font-size:14px;color:var(--text-light)" id="product-allergens">–</p>
+            </div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px" data-lang="storage">보관 방법</h4>
+              <p style="font-size:14px;color:var(--text-light)" id="product-storage">–</p>
+            </div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px" data-lang="expiry">유통기한</h4>
+              <p style="font-size:14px;color:var(--text-light)" id="product-expiry">–</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nutrition Tab -->
+      <div class="tab-panel" id="tab-nutrition">
+        <div style="max-width:480px">
+          <h3 style="font-size:20px;font-weight:700;margin-bottom:16px" data-lang="tab_nutrition">영양 정보</h3>
+          <div style="background:var(--secondary);border-radius:var(--radius-lg);overflow:hidden">
+            <div style="background:var(--text);color:white;padding:16px 20px">
+              <div style="font-size:22px;font-weight:900">Nutrition Facts</div>
+              <div style="font-size:13px;opacity:0.7" id="product-weight-detail">Per serving</div>
+            </div>
+            <table class="nutrition-table" id="nutrition-table">
+              <tr><td>Calories</td><td>–</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Tab -->
+      <div class="tab-panel" id="tab-reviews">
+        <div style="display:grid;grid-template-columns:280px 1fr;gap:48px">
+          <div>
+            <div style="text-align:center;margin-bottom:24px">
+              <div style="font-size:64px;font-weight:900;letter-spacing:-3px" id="avg-rating">–</div>
+              <div style="color:#F8C400;font-size:24px" id="avg-stars">★★★★★</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Based on reviews</div>
+            </div>
+            <div id="rating-breakdown"></div>
+          </div>
+          <div>
+            <div id="reviews-list"></div>
+
+            <!-- Write Review -->
+            <form class="write-review-form" id="write-review-form">
+              <h4 data-lang="write_review">리뷰 작성</h4>
+              <div style="margin-bottom:16px">
+                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px" data-lang="your_rating">별점</label>
+                <div class="star-picker">
+                  <span class="star-pick" data-star="1">★</span>
+                  <span class="star-pick" data-star="2">★</span>
+                  <span class="star-pick" data-star="3">★</span>
+                  <span class="star-pick" data-star="4">★</span>
+                  <span class="star-pick" data-star="5">★</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label data-lang="your_name">이름</label>
+                <input type="text" id="review-name" placeholder="Your name" required>
+              </div>
+              <div class="form-group">
+                <label>Review Title</label>
+                <input type="text" id="review-title" data-lang-placeholder="review_title_placeholder" placeholder="Enter a review title" required>
+              </div>
+              <div class="form-group">
+                <label>Review</label>
+                <textarea id="review-body" data-lang-placeholder="review_body_placeholder" placeholder="Write your review..." required></textarea>
+              </div>
+              <button type="submit" class="submit-review-btn" data-lang="submit_review">리뷰 등록</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q&A Tab -->
+      <div class="tab-panel" id="tab-qa">
+        <h3 style="font-size:20px;font-weight:700;margin-bottom:24px">Q&A</h3>
+        <div id="qa-list" style="margin-bottom:32px"></div>
+        <form id="qa-form" style="display:flex;gap:10px">
+          <input type="text" id="qa-input" style="flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text)" data-lang-placeholder="question_placeholder" placeholder="Enter your question...">
+          <button type="submit" style="padding:12px 24px;background:var(--primary);border-radius:var(--radius-sm);font-size:14px;font-weight:700" data-lang="ask_question">질문하기</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    <section class="section">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="eyebrow">More to Explore</div>
+          <h2 data-lang="related_products">관련 상품</h2>
+        </div>
+        <a href="shop.html" class="view-all" data-lang="view_all">전체 보기 →</a>
+      </div>
+      <div class="product-grid" id="related-grid"></div>
+    </section>
+
+    <!-- Recently Viewed -->
+    <section class="section" id="recent-section">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="eyebrow">Your History</div>
+          <h2 data-lang="recently_viewed">최근 본 상품</h2>
+        </div>
+      </div>
+      <div class="product-grid" id="recent-grid"></div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Sticky Bar -->
+<div class="sticky-bar" id="sticky-bar">
+  <div class="sticky-bar-info">
+    <div class="name" id="sticky-product-name">–</div>
+    <div class="price" id="sticky-product-price">–</div>
+  </div>
+  <button class="sticky-bar-btn" id="sticky-add-cart">
+    🛒 <span data-lang="add_cart">장바구니에 담기</span>
+  </button>
+</div>
+
+<footer id="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div>
+        <p data-lang="footer_about">세이위는 7개국 최고의 아시아 식품을 한 곳에서 만날 수 있는 프리미엄 마켓플레이스입니다.</p>
+        <div class="social-links">
+          <a href="#" class="social-link">📘</a>
+          <a href="#" class="social-link">📸</a>
+          <a href="#" class="social-link">🐦</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_shop">쇼핑</h4>
+        <ul>
+          <li><a href="shop.html">All Products</a></li>
+          <li><a href="shop.html?sort=bestseller">Best Sellers</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_company">회사</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_support">고객지원</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Returns</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-lang="footer_copyright">© 2025 SAYWEE. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/language.js"></script>
+<script src="js/products.js"></script>
+<script src="js/script.js"></script>
+<script src="js/images.js"></script>
+<script>
+// ── GALLERY SYSTEM ──────────────────────────────
+function setMainImage(src) {
+  const mainImg = document.getElementById('gallery-main-img');
+  if (!mainImg) return;
+  mainImg.style.opacity = '0';
+  mainImg.style.transition = 'opacity 0.25s';
+  setTimeout(() => {
+    mainImg.src = src;
+    mainImg.onload = () => { mainImg.style.opacity = '1'; };
+    mainImg.onerror = () => { mainImg.src = DEFAULT_PRODUCT_IMAGE; mainImg.style.opacity='1'; };
+  }, 150);
+}
+
+function initGallery(productId, mainImage) {
+  const gallery = getProductGallery(productId);
+  const allImages = [mainImage || gallery[0], ...gallery.slice(1)];
+
+  // Set main image
+  setMainImage(allImages[0]);
+
+  // Fill thumbnails
+  const thumbEls = document.querySelectorAll('.gallery-thumb');
+  thumbEls.forEach((thumb, i) => {
+    const imgEl = thumb.querySelector('img');
+    if (imgEl && allImages[i]) {
+      imgEl.src = allImages[i];
+      imgEl.style.opacity = '1';
+      imgEl.onerror = function() { this.src = DEFAULT_PRODUCT_IMAGE; };
+    }
+    thumb.addEventListener('click', () => {
+      document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      const src = imgEl ? imgEl.src : allImages[i];
+      setMainImage(src);
+    });
+  });
+
+  // Main image zoom on hover
+  const mainImg = document.getElementById('gallery-main-img');
+  if (mainImg) {
+    mainImg.style.transition = 'transform 0.3s ease, opacity 0.25s';
+    mainImg.addEventListener('mouseenter', () => { mainImg.style.transform = 'scale(1.04)'; });
+    mainImg.addEventListener('mouseleave', () => { mainImg.style.transform = 'scale(1)'; });
+  }
+}
+
+// ── PRODUCT LOAD ─────────────────────────────────
+document.addEventListener('productsLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) return;
+  const p = getProductById(id);
+  if (!p) return;
+
+  // Show/hide original price & save badge
+  if (p.originalPrice) {
+    const orig = document.getElementById('product-price-original');
+    const save = document.getElementById('product-price-save');
+    if (orig) orig.style.display = '';
+    if (save) save.style.display = '';
+  }
+
+  // Init gallery with real images
+  initGallery(id, p.image);
+
+  // Rating
+  const avgEl = document.getElementById('avg-rating');
+  const starEl = document.getElementById('avg-stars');
+  if (avgEl) avgEl.textContent = p.rating;
+  if (starEl && window.starsHtml) starEl.innerHTML = starsHtml(p.rating);
+});
+</script>
+<script src="js/images.js"></script>
+</body>
+</html>

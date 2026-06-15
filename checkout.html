@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout – SAYWEE</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    .checkout-wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; display: grid; grid-template-columns: 1fr 380px; gap: 40px; }
+    @media(max-width:900px){ .checkout-wrap { grid-template-columns:1fr; } }
+    .section-title { font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#999; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid #eee; }
+    .card { background:#fff; border:1px solid #eee; border-radius:14px; padding:24px; margin-bottom:20px; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .field { margin-bottom:14px; }
+    .field label { display:block; font-size:12px; font-weight:600; margin-bottom:5px; color:#444; }
+    .field input, .field select {
+      width:100%; padding:11px 14px; border:1.5px solid #e5e5e5; border-radius:8px;
+      font-size:14px; outline:none; transition:border .2s; font-family:inherit; background:#fff;
+    }
+    .field input:focus, .field select:focus { border-color:#111; }
+    .payment-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+    .pay-tab {
+      padding:10px 18px; border:1.5px solid #e5e5e5; border-radius:8px;
+      font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; background:#fff;
+    }
+    .pay-tab.on { border-color:#111; background:#111; color:#fff; }
+    .pay-panel { display:none; }
+    .pay-panel.on { display:block; }
+    .card-icons { display:flex; gap:8px; margin-bottom:16px; }
+    .card-icon { padding:4px 10px; border:1px solid #eee; border-radius:5px; font-size:12px; font-weight:700; }
+    .order-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #f5f5f5; }
+    .order-item:last-child { border:none; }
+    .order-item-img { width:54px; height:54px; border-radius:8px; object-fit:cover; background:#f7f3e8; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:22px; }
+    .order-item-info { flex:1; }
+    .order-item-name { font-size:13px; font-weight:700; }
+    .order-item-meta { font-size:11px; color:#999; }
+    .order-item-price { font-size:14px; font-weight:700; }
+    .summary-row { display:flex; justify-content:space-between; font-size:14px; padding:7px 0; }
+    .summary-row.total { font-size:18px; font-weight:800; padding:14px 0; border-top:1px solid #eee; margin-top:6px; }
+    .btn-place {
+      width:100%; padding:16px; background:#F8E400; border:none; border-radius:10px;
+      font-size:16px; font-weight:800; cursor:pointer; transition:all .2s; font-family:inherit;
+      margin-top:16px; letter-spacing:-.2px;
+    }
+    .btn-place:hover { background:#111; color:#fff; }
+    .btn-place:disabled { background:#eee; color:#aaa; cursor:not-allowed; }
+    .steps { display:flex; align-items:center; gap:0; margin-bottom:32px; }
+    .step { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:#bbb; }
+    .step.done { color:#22c55e; }
+    .step.active { color:#111; }
+    .step-num { width:28px; height:28px; border-radius:50%; border:2px solid currentColor; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+    .step.done .step-num { background:#22c55e; color:#fff; border-color:#22c55e; }
+    .step.active .step-num { background:#111; color:#fff; border-color:#111; }
+    .step-line { flex:1; height:2px; background:#eee; margin:0 8px; }
+    .step.done + .step-line { background:#22c55e; }
+    /* Success Screen */
+    #success-screen { display:none; text-align:center; padding:60px 24px; max-width:560px; margin:0 auto; }
+    .success-icon { font-size:72px; margin-bottom:20px; animation: pop .4s ease; }
+    @keyframes pop { 0%{transform:scale(.5);opacity:0} 80%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+    .coupon-row { display:flex; gap:8px; margin-bottom:4px; }
+    .coupon-row input { flex:1; padding:10px 14px; border:1.5px solid #e5e5e5; border-radius:8px; font-size:13px; outline:none; font-family:inherit; }
+    .coupon-row input:focus { border-color:#111; }
+    .coupon-row button { padding:10px 18px; border:none; background:#111; color:#fff; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; }
+    .coupon-msg { font-size:12px; margin-top:4px; min-height:18px; }
+  </style>
+
+<style id="brand-blue-override">
+/* SAYWEE Weee-style blue override */
+:root { --brand-green: #0D2DBD !important; --brand-green-dark: #0a1f8f !important; }
+.logo-brand { color: #0D2DBD !important; }
+.btn-primary, .add-to-cart-btn, .buy-now-btn { background: #0D2DBD !important; }
+a.btn-primary:hover, .btn-primary:hover { background: #0a1f8f !important; }
+.header { border-bottom: 3px solid #0D2DBD !important; }
+.hero-slider .slide-indicator.active { background: #0D2DBD !important; }
+.product-card-img img { object-fit: cover; width: 100%; height: 100%; }
+.hero-slide img { object-fit: cover; width: 100%; height: 100%; }
+</style>
+
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+
+<!-- HEADER nhỏ gọn -->
+<header style="position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid #eee;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="index.html" style="font-size:20px;font-weight:900;letter-spacing:-1px;text-decoration:none;color:#111;">SAY<span style="background:#0D2DBD;color:white;padding:2px 8px;border-radius:6px;margin-left:2px;">WEE</span></a>
+  <div style="display:flex;align-items:center;gap:16px;font-size:13px;color:#999;">
+    <span>🔒 보안 결제</span>
+    <a href="cart.html" style="color:#999;text-decoration:none;">← 장바구니로 돌아가기</a>
+  </div>
+</header>
+
+<main style="padding-top:0;" id="main-content">
+<div class="checkout-wrap">
+
+  <!-- LEFT: Form -->
+  <div>
+    <!-- Steps -->
+    <div class="steps">
+      <div class="step done" id="s1"><div class="step-num">✓</div><span>장바구니</span></div>
+      <div class="step-line"></div>
+      <div class="step active" id="s2"><div class="step-num">2</div><span>배송 정보</span></div>
+      <div class="step-line"></div>
+      <div class="step" id="s3"><div class="step-num">3</div><span>결제</span></div>
+      <div class="step-line"></div>
+      <div class="step" id="s4"><div class="step-num">4</div><span>완료</span></div>
+    </div>
+
+    <!-- STEP 2: Shipping Info -->
+    <div id="step-shipping">
+      <div class="card">
+        <div class="section-title">📦 배송 정보</div>
+        <div class="field-row">
+          <div class="field"><label>이름 *</label><input type="text" id="sh-name" placeholder="홍길동"></div>
+          <div class="field"><label>연락처 *</label><input type="tel" id="sh-phone" placeholder="010-0000-0000"></div>
+        </div>
+        <div class="field"><label>이메일 *</label><input type="email" id="sh-email" placeholder="you@example.com"></div>
+        <div class="field-row">
+          <div class="field"><label>국가</label>
+            <select id="sh-country">
+              <option>대한민국</option><option>미국</option><option>일본</option>
+              <option>중국</option><option>베트남</option><option>태국</option>
+              <option>프랑스</option><option>영국</option><option>독일</option><option>캐나다</option><option>호주</option>
+            </select>
+          </div>
+          <div class="field"><label>우편번호</label><input type="text" id="sh-zip" placeholder="12345"></div>
+        </div>
+        <div class="field"><label>주소 *</label><input type="text" id="sh-addr1" placeholder="도로명 주소"></div>
+        <div class="field"><label>상세 주소</label><input type="text" id="sh-addr2" placeholder="아파트, 동/호수 등"></div>
+        <div class="field"><label>배송 메모</label><input type="text" id="sh-note" placeholder="배송 시 요청사항 (선택)"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">🚚 배송 방법</div>
+        <div style="display:flex;flex-direction:column;gap:10px;" id="shipping-options">
+          <label style="display:flex;align-items:center;gap:12px;padding:14px;border:1.5px solid #111;border-radius:10px;cursor:pointer;background:#fafafa;">
+            <input type="radio" name="ship" value="standard" checked style="accent-color:#111;width:16px;height:16px;">
+            <div style="flex:1"><div style="font-weight:700;font-size:14px;">일반 배송</div><div style="font-size:12px;color:#999;margin-top:2px;">3-7 영업일</div></div>
+            <div style="font-weight:700;font-size:14px;" id="ship-std-price">$5.99</div>
+          </label>
+          <label style="display:flex;align-items:center;gap:12px;padding:14px;border:1.5px solid #e5e5e5;border-radius:10px;cursor:pointer;">
+            <input type="radio" name="ship" value="express" style="accent-color:#111;width:16px;height:16px;">
+            <div style="flex:1"><div style="font-weight:700;font-size:14px;">빠른 배송</div><div style="font-size:12px;color:#999;margin-top:2px;">1-3 영업일</div></div>
+            <div style="font-weight:700;font-size:14px;">$12.99</div>
+          </label>
+          <label style="display:flex;align-items:center;gap:12px;padding:14px;border:1.5px solid #e5e5e5;border-radius:10px;cursor:pointer;">
+            <input type="radio" name="ship" value="free" style="accent-color:#111;width:16px;height:16px;">
+            <div style="flex:1"><div style="font-weight:700;font-size:14px;">무료 배송 <span style="background:#F8E400;padding:2px 7px;border-radius:5px;font-size:11px;margin-left:4px;">$35 이상</span></div><div style="font-size:12px;color:#999;margin-top:2px;">5-10 영업일</div></div>
+            <div style="font-weight:700;font-size:14px;color:#22c55e;">무료</div>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-place" onclick="goToPayment()">결제 방법 선택 →</button>
+    </div>
+
+    <!-- STEP 3: Payment -->
+    <div id="step-payment" style="display:none;">
+      <div class="card">
+        <div class="section-title">💳 결제 방법</div>
+        <div class="payment-tabs">
+          <button class="pay-tab on" onclick="showPay('card',this)">💳 신용카드</button>
+          <button class="pay-tab" onclick="showPay('transfer',this)">🏦 계좌이체</button>
+          <button class="pay-tab" onclick="showPay('kakao',this)">💛 카카오페이</button>
+          <button class="pay-tab" onclick="showPay('naver',this)">🟢 네이버페이</button>
+          <button class="pay-tab" onclick="showPay('paypal',this)">🔵 PayPal</button>
+        </div>
+
+        <!-- 신용카드 -->
+        <div class="pay-panel on" id="pay-card">
+          <div class="card-icons">
+            <div class="card-icon" style="color:#1a1f71;border-color:#1a1f71;">VISA</div>
+            <div class="card-icon" style="color:#eb001b;">MC</div>
+            <div class="card-icon" style="color:#2e77bc;">AMEX</div>
+            <div class="card-icon" style="color:#ff6600;">JCB</div>
+          </div>
+          <div class="field"><label>카드 번호</label><input type="text" id="cc-num" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtCard(this)"></div>
+          <div class="field-row">
+            <div class="field"><label>유효기간</label><input type="text" id="cc-exp" placeholder="MM / YY" maxlength="7" oninput="fmtExp(this)"></div>
+            <div class="field"><label>CVV</label><input type="password" id="cc-cvv" placeholder="•••" maxlength="4"></div>
+          </div>
+          <div class="field"><label>카드 소유자 이름</label><input type="text" id="cc-name" placeholder="HONG GIL DONG"></div>
+        </div>
+
+        <!-- 계좌이체 -->
+        <div class="pay-panel" id="pay-transfer">
+          <div style="background:#f7f3e8;border-radius:10px;padding:20px;">
+            <div style="font-weight:700;margin-bottom:10px;">입금 계좌 정보</div>
+            <div style="font-size:14px;line-height:2;color:#555;">
+              은행: <strong>국민은행</strong><br>
+              계좌번호: <strong>123-456-789012</strong><br>
+              예금주: <strong>SAYWEE Inc.</strong>
+            </div>
+            <div style="font-size:12px;color:#999;margin-top:12px;">* 주문 후 24시간 이내 입금 확인 시 발송됩니다.</div>
+          </div>
+        </div>
+
+        <!-- 카카오페이 -->
+        <div class="pay-panel" id="pay-kakao">
+          <div style="text-align:center;padding:32px;background:#f7f3e8;border-radius:10px;">
+            <div style="font-size:48px;margin-bottom:12px;">💛</div>
+            <div style="font-weight:700;font-size:16px;margin-bottom:6px;">카카오페이로 결제</div>
+            <div style="font-size:13px;color:#888;">'주문하기' 버튼을 누르면 카카오페이로 이동합니다.</div>
+          </div>
+        </div>
+
+        <!-- 네이버페이 -->
+        <div class="pay-panel" id="pay-naver">
+          <div style="text-align:center;padding:32px;background:#f0fff4;border-radius:10px;">
+            <div style="font-size:48px;margin-bottom:12px;">🟢</div>
+            <div style="font-weight:700;font-size:16px;margin-bottom:6px;">네이버페이로 결제</div>
+            <div style="font-size:13px;color:#888;">'주문하기' 버튼을 누르면 네이버페이로 이동합니다.</div>
+          </div>
+        </div>
+
+        <!-- PayPal -->
+        <div class="pay-panel" id="pay-paypal">
+          <div style="text-align:center;padding:32px;background:#f0f8ff;border-radius:10px;">
+            <div style="font-size:48px;margin-bottom:12px;">🔵</div>
+            <div style="font-weight:700;font-size:16px;margin-bottom:6px;">PayPal로 결제</div>
+            <div style="font-size:13px;color:#888;">'주문하기' 버튼을 누르면 PayPal로 이동합니다.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;">
+        <button onclick="goToShipping()" style="flex:1;padding:14px;border:1.5px solid #e5e5e5;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;background:#fff;font-family:inherit;">← 이전 단계</button>
+        <button class="btn-place" style="flex:2;margin-top:0;" onclick="placeOrder()">🛒 주문하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Order Summary -->
+  <div>
+    <div class="card" style="position:sticky;top:80px;">
+      <div class="section-title">🧾 주문 내역</div>
+      <div id="order-items-list">
+        <div style="text-align:center;padding:20px;color:#bbb;">Loading...</div>
+      </div>
+
+      <!-- Coupon -->
+      <div style="margin:16px 0 0;padding-top:16px;border-top:1px solid #eee;">
+        <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:#444;">쿠폰 코드</div>
+        <div class="coupon-row">
+          <input type="text" id="coupon-input" placeholder="코드 입력 (예: SAYWEE10)">
+          <button onclick="applyCoupon()">적용</button>
+        </div>
+        <div class="coupon-msg" id="coupon-msg"></div>
+      </div>
+
+      <!-- Totals -->
+      <div style="margin-top:16px;">
+        <div class="summary-row"><span>상품 합계</span><span id="sum-subtotal">$0.00</span></div>
+        <div class="summary-row"><span>배송비</span><span id="sum-shipping">$5.99</span></div>
+        <div class="summary-row" id="sum-discount-row" style="color:#22c55e;display:none;"><span>할인</span><span id="sum-discount">-$0.00</span></div>
+        <div class="summary-row total"><span>최종 결제</span><span id="sum-total">$0.00</span></div>
+      </div>
+
+      <!-- Trust badges -->
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:16px;opacity:0.5;font-size:11px;font-weight:600;">
+        <span>🔒 SSL 암호화</span>
+        <span>✓ 100% 정품</span>
+        <span>↩ 7일 반품</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<!-- SUCCESS SCREEN -->
+<div id="success-screen">
+  <div class="success-icon">🎉</div>
+  <h1 style="font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;">주문 완료!</h1>
+  <p style="color:#888;font-size:15px;margin-bottom:6px;">주문이 성공적으로 접수되었습니다.</p>
+  <p style="color:#888;font-size:14px;margin-bottom:32px;">주문 확인 이메일이 곧 발송됩니다. 📧</p>
+  <div id="order-num-box" style="background:#f7f3e8;border-radius:12px;padding:20px;margin-bottom:28px;text-align:center;">
+    <div style="font-size:12px;color:#999;margin-bottom:6px;">주문 번호</div>
+    <div id="order-number" style="font-size:22px;font-weight:900;letter-spacing:1px;"></div>
+  </div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <a href="index.html" style="padding:13px 28px;background:#F8E400;border-radius:10px;font-weight:700;text-decoration:none;color:#111;">🏠 홈으로 가기</a>
+    <a href="shop.html" style="padding:13px 28px;background:#111;color:#fff;border-radius:10px;font-weight:700;text-decoration:none;">🛒 쇼핑 계속하기</a>
+  </div>
+</div>
+
+<script src="js/language.js"></script>
+<script src="js/products.js"></script>
+<script src="js/script.js"></script>
+<script>
+var discount = 0;
+var currentPayMethod = 'card';
+
+// ── Render order items ──────────────────────────────────
+function renderOrderItems() {
+  var cart = Cart ? Cart.get() : [];
+  var list = document.getElementById('order-items-list');
+  if (!cart.length) { list.innerHTML = '<div style="text-align:center;padding:20px;color:#bbb;">장바구니가 비어있습니다</div>'; return; }
+  var html = '';
+  cart.forEach(function(item) {
+    var p = getProductById(item.id);
+    if (!p) return;
+    var flag = {'Korea':'🇰🇷','Japan':'🇯🇵','China':'🇨🇳','Vietnam':'🇻🇳','Thailand':'🇹🇭','India':'🇮🇳','Taiwan':'🇹🇼'}[p.country]||'🌏';
+    html += '<div class="order-item">'
+      + '<div class="order-item-img" style="background:' + getProductGradient(p) + '">' + flag + '</div>'
+      + '<div class="order-item-info"><div class="order-item-name">' + p.name + '</div><div class="order-item-meta">' + p.brand + ' × ' + item.qty + '</div></div>'
+      + '<div class="order-item-price">$' + (p.price * item.qty).toFixed(2) + '</div>'
+      + '</div>';
+  });
+  list.innerHTML = html;
+  updateTotals();
+}
+
+function getShippingCost() {
+  var method = document.querySelector('input[name="ship"]:checked');
+  var val = method ? method.value : 'standard';
+  var sub = Cart ? Cart.total() : 0;
+  if (val === 'free') return 0;
+  if (val === 'express') return 12.99;
+  return sub >= 35 ? 0 : 5.99;
+}
+
+function updateTotals() {
+  var sub = Cart ? Cart.total() : 0;
+  var ship = getShippingCost();
+  var total = sub + ship - discount;
+  document.getElementById('sum-subtotal').textContent = '$' + sub.toFixed(2);
+  document.getElementById('sum-shipping').textContent = ship === 0 ? '무료' : '$' + ship.toFixed(2);
+  document.getElementById('sum-total').textContent = '$' + Math.max(0, total).toFixed(2);
+  if (discount > 0) {
+    document.getElementById('sum-discount-row').style.display = 'flex';
+    document.getElementById('sum-discount').textContent = '-$' + discount.toFixed(2);
+  }
+  // Free shipping indicator
+  var stdEl = document.getElementById('ship-std-price');
+  if (stdEl) stdEl.textContent = sub >= 35 ? '무료' : '$5.99';
+}
+
+// Update totals when shipping option changes
+document.querySelectorAll('input[name="ship"]').forEach(function(r){
+  r.addEventListener('change', function(){
+    // Style selected
+    document.querySelectorAll('#shipping-options label').forEach(function(l){ l.style.borderColor='#e5e5e5'; l.style.background=''; });
+    r.closest('label').style.borderColor='#111'; r.closest('label').style.background='#fafafa';
+    updateTotals();
+  });
+});
+
+// ── Coupon ──────────────────────────────────────────────
+function applyCoupon() {
+  var code = document.getElementById('coupon-input').value.trim().toUpperCase();
+  var msg = document.getElementById('coupon-msg');
+  var sub = Cart ? Cart.total() : 0;
+  if (code === 'SAYWEE10') {
+    discount = sub * 0.1;
+    msg.textContent = '✅ 10% 할인 적용됨!';
+    msg.style.color = '#22c55e';
+  } else if (code === 'FREESHIP') {
+    discount = getShippingCost();
+    msg.textContent = '✅ 무료 배송 쿠폰 적용!';
+    msg.style.color = '#22c55e';
+  } else if (code === 'WELCOME15') {
+    discount = sub * 0.15;
+    msg.textContent = '✅ 15% 신규 할인 적용됨!';
+    msg.style.color = '#22c55e';
+  } else {
+    discount = 0;
+    msg.textContent = '❌ 유효하지 않은 쿠폰 코드입니다';
+    msg.style.color = '#ff4444';
+  }
+  updateTotals();
+}
+
+// ── Step navigation ─────────────────────────────────────
+function setStep(n) {
+  [1,2,3,4].forEach(function(i){
+    var el = document.getElementById('s'+i);
+    if (!el) return;
+    el.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
+    if (i < n) el.querySelector('.step-num').textContent = '✓';
+    else el.querySelector('.step-num').textContent = i;
+  });
+}
+
+function goToPayment() {
+  var name = document.getElementById('sh-name').value.trim();
+  var phone = document.getElementById('sh-phone').value.trim();
+  var email = document.getElementById('sh-email').value.trim();
+  var addr = document.getElementById('sh-addr1').value.trim();
+  if (!name) { showToast && showToast('이름을 입력해주세요', 'warning'); document.getElementById('sh-name').focus(); return; }
+  if (!phone) { showToast && showToast('연락처를 입력해주세요', 'warning'); document.getElementById('sh-phone').focus(); return; }
+  if (!email) { showToast && showToast('이메일을 입력해주세요', 'warning'); document.getElementById('sh-email').focus(); return; }
+  if (!addr)  { showToast && showToast('주소를 입력해주세요', 'warning'); document.getElementById('sh-addr1').focus(); return; }
+  document.getElementById('step-shipping').style.display = 'none';
+  document.getElementById('step-payment').style.display = '';
+  setStep(3);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function goToShipping() {
+  document.getElementById('step-payment').style.display = 'none';
+  document.getElementById('step-shipping').style.display = '';
+  setStep(2);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── Payment method ────────────────────────────────────────
+function showPay(name, btn) {
+  document.querySelectorAll('.pay-tab').forEach(function(b){ b.className='pay-tab'; });
+  document.querySelectorAll('.pay-panel').forEach(function(p){ p.className='pay-panel'; });
+  btn.className = 'pay-tab on';
+  document.getElementById('pay-'+name).className = 'pay-panel on';
+  currentPayMethod = name;
+}
+
+// ── Card formatting ───────────────────────────────────────
+function fmtCard(el) {
+  var v = el.value.replace(/\D/g,'').substring(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+function fmtExp(el) {
+  var v = el.value.replace(/\D/g,'').substring(0,4);
+  if (v.length >= 3) v = v.substring(0,2) + ' / ' + v.substring(2);
+  el.value = v;
+}
+
+// ── Place Order ───────────────────────────────────────────
+function placeOrder() {
+  // Validate card if needed
+  if (currentPayMethod === 'card') {
+    var num = document.getElementById('cc-num').value.replace(/\s/g,'');
+    var exp = document.getElementById('cc-exp').value;
+    var cvv = document.getElementById('cc-cvv').value;
+    if (num.length < 16) { showToast && showToast('카드 번호를 정확히 입력해주세요', 'error'); return; }
+    if (exp.length < 7)  { showToast && showToast('유효기간을 입력해주세요', 'error'); return; }
+    if (cvv.length < 3)  { showToast && showToast('CVV를 입력해주세요', 'error'); return; }
+  }
+
+  // Processing animation
+  var btn = document.querySelector('#step-payment .btn-place');
+  btn.disabled = true;
+  btn.textContent = '⏳ 결제 처리 중...';
+
+  setTimeout(function() {
+    // Generate order number
+    var orderNum = 'SW-' + Date.now().toString().slice(-6);
+
+    // Save order to localStorage
+    var cart = Cart ? Cart.get() : [];
+    var orders = JSON.parse(localStorage.getItem('saywee_orders') || '[]');
+    orders.unshift({
+      id: orderNum,
+      date: new Date().toISOString(),
+      items: cart,
+      total: Cart ? Cart.total() + getShippingCost() - discount : 0,
+      shipping: {
+        name: document.getElementById('sh-name').value,
+        phone: document.getElementById('sh-phone').value,
+        email: document.getElementById('sh-email').value,
+        address: document.getElementById('sh-addr1').value + ' ' + document.getElementById('sh-addr2').value,
+      },
+      status: 'processing'
+    });
+    localStorage.setItem('saywee_orders', JSON.stringify(orders));
+
+    // Clear cart
+    if (Cart) Cart.clear();
+
+    // Show success
+    document.getElementById('main-content').style.display = 'none';
+    document.getElementById('order-number').textContent = orderNum;
+    document.getElementById('success-screen').style.display = 'block';
+    setStep(4);
+    window.scrollTo({top:0, behavior:'smooth'});
+  }, 1800);
+}
+
+// ── Init ──────────────────────────────────────────────────
+document.addEventListener('productsLoaded', function() {
+  renderOrderItems();
+  // Pre-fill if logged in
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem('saywee_user') || 'null'); } catch(e){}
+  if (user) {
+    if (document.getElementById('sh-name') && !document.getElementById('sh-name').value) document.getElementById('sh-name').value = user.name;
+    if (document.getElementById('sh-email') && !document.getElementById('sh-email').value) document.getElementById('sh-email').value = user.email || '';
+  }
+});
+
+if (ALL_PRODUCTS && ALL_PRODUCTS.length > 0) {
+  renderOrderItems();
+} else {
+  document.addEventListener('productsLoaded', renderOrderItems);
+}
+</script>
+<script src="js/images.js"></script>
+</body>
+</html>

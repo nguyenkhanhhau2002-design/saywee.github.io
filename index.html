@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAYWEE – Asian Food & Grocery Marketplace</title>
+  <meta name="description" content="Premium Asian food and grocery marketplace. Shop authentic Korean, Japanese, Chinese, Vietnamese, Thai, Indian, and Taiwanese products.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style id="brand-blue-override">
+/* SAYWEE Weee-style blue override */
+:root { --brand-green: #0D2DBD !important; --brand-green-dark: #0a1f8f !important; }
+.logo-brand { color: #0D2DBD !important; }
+.btn-primary, .add-to-cart-btn, .buy-now-btn { background: #0D2DBD !important; }
+a.btn-primary:hover, .btn-primary:hover { background: #0a1f8f !important; }
+.header { border-bottom: 3px solid #0D2DBD !important; }
+.hero-slider .slide-indicator.active { background: #0D2DBD !important; }
+.product-card-img img { object-fit: cover; width: 100%; height: 100%; }
+.hero-slide img { object-fit: cover; width: 100%; height: 100%; }
+</style>
+
+</head>
+<body>
+
+<!-- Page Loader -->
+<div id="page-loader" class="page-loader">
+  <div class="loader-logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- ================================================
+     HEADER
+     ================================================ -->
+<header id="site-header">
+  <div class="header-inner">
+    <!-- Logo -->
+    <div class="header-logo">
+      <a href="index.html">SAY<span style="background:#0D2DBD;color:white;">WEE</span></a>
+    </div>
+
+    <!-- Desktop Nav -->
+    <nav class="header-nav">
+      <ul>
+        <li><a href="index.html" data-lang="nav_home">홈</a></li>
+        <li><a href="shop.html" data-lang="nav_shop">쇼핑</a></li>
+        <li><a href="shop.html?country=all" data-lang="nav_countries">국가별</a></li>
+        <li><a href="blog.html" data-lang="nav_event">이벤트</a></li>
+        <li><a href="blog.html" data-lang="nav_blog">블로그</a></li>
+        <li><a href="about.html#reviews" data-lang="nav_reviews">리뷰</a></li>
+        <li><a href="about.html" data-lang="nav_about">소개</a></li>
+        <li><a href="contact.html" data-lang="nav_contact">문의</a></li>
+      </ul>
+    </nav>
+
+    <!-- Actions -->
+    <div class="header-actions">
+      <!-- Search -->
+      <button class="header-btn" id="search-btn" title="Search">🔍</button>
+
+      <!-- Language -->
+      <div class="lang-switcher">
+        <button class="lang-btn">🇰🇷 KR</button>
+        <div class="lang-dropdown">
+          <div class="lang-option active" data-lang="ko">🇰🇷 한국어</div>
+          <div class="lang-option" data-lang="en">🇺🇸 English</div>
+          <div class="lang-option" data-lang="vi">🇻🇳 Tiếng Việt</div>
+          <div class="lang-option" data-lang="ja">🇯🇵 日本語</div>
+          <div class="lang-option" data-lang="zh">🇨🇳 中文</div>
+        </div>
+      </div>
+
+      <!-- Wishlist -->
+      <a href="wishlist.html" class="header-btn" title="Wishlist">
+        ♡
+        <span class="badge wishlist-badge" style="display:none">0</span>
+      </a>
+
+      <!-- Login -->
+      <a href="login.html" class="header-btn login-link" title="Login">👤</a>
+
+      <!-- Cart -->
+      <a href="cart.html" class="header-btn" title="Cart">
+        🛒
+        <span class="badge cart-badge" style="display:none">0</span>
+      </a>
+
+      <!-- Hamburger -->
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="mobile-menu">
+  <div class="mobile-menu-inner">
+    <ul>
+      <li><a href="index.html" data-lang="nav_home">홈</a></li>
+      <li><a href="shop.html" data-lang="nav_shop">쇼핑</a></li>
+      <li><a href="shop.html" data-lang="nav_countries">국가별</a></li>
+      <li><a href="blog.html" data-lang="nav_event">이벤트</a></li>
+      <li><a href="blog.html" data-lang="nav_blog">블로그</a></li>
+      <li><a href="about.html" data-lang="nav_reviews">리뷰</a></li>
+      <li><a href="about.html" data-lang="nav_about">소개</a></li>
+      <li><a href="contact.html" data-lang="nav_contact">문의</a></li>
+    </ul>
+    <div class="mobile-menu-actions">
+      <a href="wishlist.html">♡ <span data-lang="add_to_wishlist">위시리스트</span></a>
+      <a href="login.html">👤 <span data-lang="login">로그인</span></a>
+      <a href="cart.html">🛒 <span data-lang="cart_title">장바구니</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay">
+  <div style="width:100%;max-width:680px;margin:0 auto;padding:0 20px;">
+    <div class="search-box">
+      <input type="text" id="search-input" data-lang-placeholder="search_placeholder" placeholder="상품을 검색하세요...">
+      <button class="search-submit" onclick="document.getElementById('search-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="search-results-dropdown" id="search-results"></div>
+  </div>
+</div>
+
+<!-- ================================================
+     MAIN CONTENT
+     ================================================ -->
+<main>
+
+  <!-- HERO SLIDER -->
+  <section id="hero-slider" class="hero-slider">
+    <!-- Slide 1: Korean Ramen -->
+    <div class="slide active">
+      <img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=1400&q=85" alt="Korean Ramen" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;" loading="lazy">
+      <div class="slide-overlay" style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.35) 55%,transparent 100%);display:flex;align-items:center;z-index:1;">
+        <div class="slide-content">
+          <span class="slide-tag" data-lang="hero2_tag">베스트셀러</span>
+          <h1 class="slide-title" data-lang="hero2_title">한국 라면의<br>정석</h1>
+          <p class="slide-desc" data-lang="hero2_desc">신라면, 삼양 불닭볶음면 등 인기 한국 라면을 만나보세요.</p>
+          <a href="shop.html?country=Korea&category=Instant Noodles" class="slide-btn" data-lang="hero2_btn">라면 보기 →</a>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 2: Vietnamese Coffee -->
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1400&q=85" alt="Vietnamese Coffee" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;" loading="lazy">
+      <div class="slide-overlay" style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.35) 55%,transparent 100%);display:flex;align-items:center;z-index:1;">
+        <div class="slide-content">
+          <span class="slide-tag">🇻🇳 Vietnam</span>
+          <h1 class="slide-title">베트남 커피<br>컬렉션</h1>
+          <p class="slide-desc">G7 커피, 쩐 응우옌 등 정통 베트남 커피를 만나보세요.</p>
+          <a href="shop.html?country=Vietnam&category=Coffee" class="slide-btn">커피 보기 →</a>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 3: Japanese Snacks -->
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=1400&q=85" alt="Japanese Snacks" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;" loading="lazy">
+      <div class="slide-overlay" style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.35) 55%,transparent 100%);display:flex;align-items:center;z-index:1;">
+        <div class="slide-content">
+          <span class="slide-tag">🇯🇵 Japan</span>
+          <h1 class="slide-title">일본 스낵<br>컬렉션</h1>
+          <p class="slide-desc">포키, 말차, 메이지 등 인기 일본 과자와 간식을 만나보세요.</p>
+          <a href="shop.html?country=Japan&category=Asian Snacks" class="slide-btn">스낵 보기 →</a>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 4: Bubble Tea -->
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1558857563-b371033873b8?w=1400&q=85" alt="Bubble Tea" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;" loading="lazy">
+      <div class="slide-overlay" style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.35) 55%,transparent 100%);display:flex;align-items:center;z-index:1;">
+        <div class="slide-content">
+          <span class="slide-tag" data-lang="hero3_tag">특별 할인</span>
+          <h1 class="slide-title" data-lang="hero3_title">버블티를<br>집에서</h1>
+          <p class="slide-desc" data-lang="hero3_desc">대만 정통 버블티 키트로 카페 맛을 집에서 즐기세요.</p>
+          <a href="shop.html?country=Taiwan" class="slide-btn" data-lang="hero3_btn">지금 주문 →</a>
+        </div>
+      </div>
+    </div>
+    <!-- Controls -->
+    <div class="slider-arrows">
+      <button class="slider-arrow slider-prev">←</button>
+      <button class="slider-arrow slider-next">→</button>
+    </div>
+    <div class="slider-nav">
+      <div class="slider-dot active"></div>
+      <div class="slider-dot"></div>
+      <div class="slider-dot"></div>
+      <div class="slider-dot"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE BANNER -->
+  <div class="marquee-section">
+    <div class="marquee-track" id="marquee-track">
+      <span class="marquee-item">무료배송 $35 이상</span>
+      <span class="marquee-item">100% 정품 보장</span>
+      <span class="marquee-item">신선도 보장</span>
+      <span class="marquee-item">7개국 직수입</span>
+      <span class="marquee-item">안전한 결제</span>
+      <span class="marquee-item">빠른 배송</span>
+      <span class="marquee-item">무료배송 $35 이상</span>
+      <span class="marquee-item">100% 정품 보장</span>
+      <span class="marquee-item">신선도 보장</span>
+      <span class="marquee-item">7개국 직수입</span>
+      <span class="marquee-item">안전한 결제</span>
+      <span class="marquee-item">빠른 배송</span>
+    </div>
+  </div>
+
+  <!-- SHOP BY COUNTRY -->
+  <section class="section fade-in">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="eyebrow">Explore</div>
+          <h2 data-lang="section_country">국가별 쇼핑</h2>
+        </div>
+        <a href="shop.html" class="view-all" data-lang="view_all">전체 보기 →</a>
+      </div>
+      <div class="country-grid">
+        <div class="country-card" onclick="window.location.href='shop.html?country=Korea'">
+          <span class="country-flag">🇰🇷</span>
+          <div class="country-name" data-lang="country_korea">한국</div>
+          <div class="country-count">18 Products</div>
+        </div>
+        <div class="country-card" onclick="window.location.href='shop.html?country=Japan'">
+          <span class="country-flag">🇯🇵</span>
+          <div class="country-name" data-lang="country_japan">일본</div>
+          <div class="country-count">18 Products</div>
+        </div>
+        <div class="country-card" onclick="window.location.href='shop.html?country=China'">
+          <span class="country-flag">🇨🇳</span>
+          <div class="country-name" data-lang="country_china">중국</div>
+          <div class="country-count">16 Products</div>
+        </div>
+        <div class="country-card" onclick="window.location.href='shop.html?country=Vietnam'">
+          <span class="country-flag">🇻🇳</span>
+          <div class="country-name" data-lang="country_vietnam">베트남</div>
+          <div class="country-count">14 Products</div>
+        </div>
+        <div class="country-card" onclick="window.location.href='shop.html?country=Thailand'">
+          <span class="country-flag">🇹🇭</span>
+          <div class="country-name" data-lang="country_thailand">태국</div>
+          <div class="country-count">15 Products</div>
+        </div>
+        <div class="country-card" onclick="window.location.href='shop.html?country=India'">
+          <span class="country-flag">🇮🇳</span>
+          <div class="country-name" data-lang="country_india">인도</div>
+          <div class="country-count">14 Products</div>
+        </div>
+        <div class="country-card" onclick="window.location.href='shop.html?country=Taiwan'">
+          <span class="country-flag">🇹🇼</span>
+          <div class="country-name" data-lang="country_taiwan">대만</div>
+          <div class="country-count">12 Products</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEST SELLERS -->
+  <section class="section section-alt fade-in">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="eyebrow">Top Picks</div>
+          <h2 data-lang="section_bestseller">베스트셀러</h2>
+        </div>
+        <a href="shop.html?sort=bestseller" class="view-all" data-lang="view_all">전체 보기 →</a>
+      </div>
+      <div class="product-grid" id="bestsellers-grid">
+        <!-- Rendered by JS -->
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">Loading...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMO BANNERS -->
+  <section class="section fade-in">
+    <div class="container">
+      <div class="promo-banners">
+        <div class="promo-banner" onclick="window.location.href='shop.html?country=Korea'">
+          <img src="https://images.unsplash.com/photo-1583224964978-2257b8a897e6?w=800&q=80" alt="Korean Food">
+          <div class="promo-banner-overlay">
+            <div class="tag">🇰🇷 Korea</div>
+            <h3>김치부터 라면까지<br>한국의 맛</h3>
+            <span class="cta">쇼핑하기 →</span>
+          </div>
+        </div>
+        <div class="promo-banner" onclick="window.location.href='shop.html?country=Japan'">
+          <img src="https://images.unsplash.com/photo-1607301405752-f30e6a686c92?w=800&q=80" alt="Japanese Food">
+          <div class="promo-banner-overlay">
+            <div class="tag">🇯🇵 Japan</div>
+            <h3>말차부터 모치까지<br>일본의 정수</h3>
+            <span class="cta">쇼핑하기 →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEW ARRIVALS -->
+  <section class="section fade-in">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="eyebrow">Just In</div>
+          <h2 data-lang="section_new">신상품</h2>
+        </div>
+        <a href="shop.html?sort=new" class="view-all" data-lang="view_all">전체 보기 →</a>
+      </div>
+      <div class="product-grid" id="new-arrivals-grid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">Loading...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASIAN DRINKS -->
+  <section class="section section-alt fade-in">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="eyebrow">Beverages</div>
+          <h2 data-lang="section_drinks">아시아 음료</h2>
+        </div>
+        <a href="shop.html?category=Asian Drinks" class="view-all" data-lang="view_all">전체 보기 →</a>
+      </div>
+      <div class="scroll-section">
+        <div class="scroll-track product-grid" id="drinks-track"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASIAN SNACKS -->
+  <section class="section fade-in">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="eyebrow">Snacks</div>
+          <h2 data-lang="section_snacks">아시아 스낵</h2>
+        </div>
+        <a href="shop.html?category=Asian Snacks" class="view-all" data-lang="view_all">전체 보기 →</a>
+      </div>
+      <div class="scroll-section">
+        <div class="scroll-track product-grid" id="snacks-track"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CUSTOMER REVIEWS -->
+  <section class="section section-alt fade-in" id="reviews">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="eyebrow">Testimonials</div>
+          <h2 data-lang="section_reviews">고객 리뷰</h2>
+        </div>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer-avatar">S</div>
+            <div>
+              <div class="reviewer-name">Sarah K.</div>
+              <div class="reviewer-meta">🇺🇸 United States · Verified Buyer</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-title">Finally, real Asian food at home!</div>
+          <div class="review-body">I've been looking for authentic Korean and Japanese ingredients for years. SAYWEE has everything I need. The quality is outstanding and shipping is super fast.</div>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer-avatar">M</div>
+            <div>
+              <div class="reviewer-name">Minh T.</div>
+              <div class="reviewer-meta">🇦🇺 Australia · Verified Buyer</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-title">Shin Ramyun tastes exactly like home</div>
+          <div class="review-body">As a Korean living abroad, SAYWEE is a lifesaver. The products are 100% authentic, packaging is always perfect, and prices are very reasonable.</div>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer-avatar">L</div>
+            <div>
+              <div class="reviewer-name">Linh N.</div>
+              <div class="reviewer-meta">🇩🇪 Germany · Verified Buyer</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-title">Best Vietnamese coffee I can find in Europe</div>
+          <div class="review-body">G7 coffee and Vinamilk condensed milk - now I can finally make proper Vietnamese iced coffee at home. Thank you SAYWEE for these authentic products!</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND STORY -->
+  <section class="section fade-in">
+    <div class="container">
+      <div class="brand-story">
+        <div class="brand-story-img">
+          <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80" alt="SAYWEE Story">
+        </div>
+        <div class="brand-story-text">
+          <div class="eyebrow" data-lang="section_story">세이위 이야기</div>
+          <h2>아시아 최고의<br>식품을 전합니다</h2>
+          <p>SAYWEE는 "Say Wee!" – 맛있어서 저절로 나오는 감탄사에서 탄생했습니다. 우리는 전 세계의 아시아 식품 팬들이 진짜 아시아의 맛을 경험할 수 있도록 7개국의 정통 식품을 엄선하여 제공합니다.</p>
+          <p>각 상품은 현지 파트너와의 직접 계약을 통해 최고의 신선도와 품질을 보장합니다. 한국의 라면부터 대만의 버블티 키트까지, SAYWEE에서는 진짜 아시아를 만날 수 있습니다.</p>
+          <div class="brand-stats">
+            <div class="stat-item">
+              <div class="stat-num">7</div>
+              <div class="stat-label" data-lang="country_korea" style="font-size:12px">국가</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">500+</div>
+              <div class="stat-label" style="font-size:12px">Products</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">50K+</div>
+              <div class="stat-label" style="font-size:12px">Customers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section fade-in">
+    <div class="container">
+      <h2 data-lang="newsletter_title">특별 혜택을 먼저 받아보세요</h2>
+      <p data-lang="newsletter_sub">신상품 소식, 할인 쿠폰, 이벤트를 이메일로 받아보세요.</p>
+      <form class="newsletter-form" id="newsletter-form">
+        <input type="email" data-lang-placeholder="newsletter_placeholder" placeholder="이메일 주소를 입력하세요" required>
+        <button type="submit" data-lang="newsletter_btn">구독하기</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- INSTAGRAM -->
+  <section class="section fade-in">
+    <div class="container">
+      <div class="section-head" style="justify-content:center;flex-direction:column;text-align:center;margin-bottom:32px">
+        <div class="eyebrow">@saywee_official</div>
+        <h2 data-lang="section_insta">인스타그램 팔로우하기</h2>
+      </div>
+      <div class="instagram-grid">
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1583224964978-2257b8a897e6?w=400&q=80" alt="instagram">
+          <div class="instagram-item-overlay">📸</div>
+        </div>
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&q=80" alt="instagram">
+          <div class="instagram-item-overlay">📸</div>
+        </div>
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="instagram">
+          <div class="instagram-item-overlay">📸</div>
+        </div>
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1607301405752-f30e6a686c92?w=400&q=80" alt="instagram">
+          <div class="instagram-item-overlay">📸</div>
+        </div>
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=400&q=80" alt="instagram">
+          <div class="instagram-item-overlay">📸</div>
+        </div>
+        <div class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=400&q=80" alt="instagram">
+          <div class="instagram-item-overlay">📸</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================================================
+     FOOTER
+     ================================================ -->
+<footer id="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div>
+        <p data-lang="footer_about">세이위는 7개국 최고의 아시아 식품을 한 곳에서 만날 수 있는 프리미엄 마켓플레이스입니다.</p>
+        <div class="social-links">
+          <a href="#" class="social-link">📘</a>
+          <a href="#" class="social-link">📸</a>
+          <a href="#" class="social-link">🐦</a>
+          <a href="#" class="social-link">▶️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_shop">쇼핑</h4>
+        <ul>
+          <li><a href="shop.html">All Products</a></li>
+          <li><a href="shop.html?sort=bestseller">Best Sellers</a></li>
+          <li><a href="shop.html?sort=new">New Arrivals</a></li>
+          <li><a href="shop.html?category=Asian Snacks">Snacks</a></li>
+          <li><a href="shop.html?category=Asian Drinks">Drinks</a></li>
+          <li><a href="shop.html?category=Instant Noodles">Instant Noodles</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_company">회사</h4>
+        <ul>
+          <li><a href="about.html">About SAYWEE</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Partners</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_support">고객지원</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Shipping Policy</a></li>
+          <li><a href="#">Return Policy</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="contact.html">Help Center</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-lang="footer_copyright">© 2025 SAYWEE. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/language.js"></script>
+<script src="js/products.js"></script>
+<script src="js/script.js"></script>
+<script src="js/images.js"></script>
+
+<script>
+// Patch product card images with real Unsplash photos after render
+document.addEventListener('productsRendered', function() {
+  document.querySelectorAll('[data-product-id], .product-card[data-id]').forEach(function(card) {
+    const pid = card.dataset.productId || card.dataset.id;
+    if (!pid) return;
+    const img = card.querySelector('.product-card-img img');
+    if (img && PRODUCT_IMAGES && PRODUCT_IMAGES[pid]) {
+      img.src = PRODUCT_IMAGES[pid].main;
+      img.onerror = function() { this.src = DEFAULT_PRODUCT_IMAGE; };
+    }
+  });
+});
+// Also run after a short delay as fallback
+setTimeout(function() {
+  document.querySelectorAll('.product-card').forEach(function(card) {
+    const pid = card.dataset.productId || card.dataset.id || card.getAttribute('onclick')?.match(/'([a-z]{2}\d{3})'/)?.[1];
+    if (!pid || !PRODUCT_IMAGES) return;
+    const img = card.querySelector('img');
+    if (img && img.src.includes('svg') && PRODUCT_IMAGES[pid]) {
+      img.src = PRODUCT_IMAGES[pid].main;
+    }
+  });
+}, 1200);
+</script>
+
+</body>
+</html>

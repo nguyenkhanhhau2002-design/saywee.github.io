@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About – SAYWEE</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style id="brand-blue-override">
+/* SAYWEE Weee-style blue override */
+:root { --brand-green: #0D2DBD !important; --brand-green-dark: #0a1f8f !important; }
+.logo-brand { color: #0D2DBD !important; }
+.btn-primary, .add-to-cart-btn, .buy-now-btn { background: #0D2DBD !important; }
+a.btn-primary:hover, .btn-primary:hover { background: #0a1f8f !important; }
+.header { border-bottom: 3px solid #0D2DBD !important; }
+.hero-slider .slide-indicator.active { background: #0D2DBD !important; }
+.product-card-img img { object-fit: cover; width: 100%; height: 100%; }
+.hero-slide img { object-fit: cover; width: 100%; height: 100%; }
+</style>
+
+</head>
+<body>
+<div id="page-loader" class="page-loader"><div class="loader-logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div></div>
+<div id="toast-container" class="toast-container"></div>
+<header id="site-header">
+  <div class="header-inner">
+    <div class="header-logo"><a href="index.html">SAY<span style="background:#0D2DBD;color:white;">WEE</span></a></div>
+    <nav class="header-nav">
+      <ul>
+        <li><a href="index.html" data-lang="nav_home">홈</a></li>
+        <li><a href="shop.html" data-lang="nav_shop">쇼핑</a></li>
+        <li><a href="blog.html" data-lang="nav_blog">블로그</a></li>
+        <li><a href="about.html" data-lang="nav_about" class="active">소개</a></li>
+        <li><a href="contact.html" data-lang="nav_contact">문의</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="header-btn" id="search-btn">🔍</button>
+      <div class="lang-switcher">
+        <button class="lang-btn">🇰🇷 KR</button>
+        <div class="lang-dropdown">
+          <div class="lang-option active" data-lang="ko">🇰🇷 한국어</div>
+          <div class="lang-option" data-lang="en">🇺🇸 English</div>
+          <div class="lang-option" data-lang="vi">🇻🇳 Tiếng Việt</div>
+          <div class="lang-option" data-lang="ja">🇯🇵 日本語</div>
+          <div class="lang-option" data-lang="zh">🇨🇳 中文</div>
+        </div>
+      </div>
+      <a href="wishlist.html" class="header-btn">♡<span class="badge wishlist-badge" style="display:none">0</span></a>
+      <a href="login.html" class="header-btn login-link">👤</a>
+      <a href="cart.html" class="header-btn">🛒<span class="badge cart-badge" style="display:none">0</span></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner"><ul><li><a href="index.html">홈</a></li><li><a href="shop.html">쇼핑</a></li><li><a href="about.html">소개</a></li><li><a href="contact.html">문의</a></li></ul></div></div>
+<div id="search-overlay" class="search-overlay">
+  <div style="width:100%;max-width:680px;margin:0 auto;padding:0 20px;">
+    <div class="search-box"><input type="text" id="search-input" placeholder="Search..."><button class="search-submit" onclick="document.getElementById('search-overlay').classList.remove('open')">✕</button></div>
+    <div class="search-results-dropdown" id="search-results"></div>
+  </div>
+</div>
+
+<main>
+  <!-- Hero -->
+  <div class="about-hero" style="padding-top:calc(var(--header-h) + 80px)">
+    <div class="container">
+      <h1 style="font-size:clamp(40px,7vw,96px);font-weight:900;letter-spacing:-4px;line-height:0.95;margin-bottom:20px">SAY<br>WEE</h1>
+      <p style="font-size:18px;color:var(--text-light);max-width:560px;margin:0 auto" data-lang="about_sub">세이위는 7개국 최고의 식품을 엄선하여 여러분의 식탁을 풍요롭게 합니다.</p>
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <section class="section">
+    <div class="container">
+      <div class="about-mission">
+        <div>
+          <div class="eyebrow" style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px">Our Mission</div>
+          <h2 style="font-size:clamp(28px,4vw,52px);font-weight:800;letter-spacing:-2px;line-height:1.05;margin-bottom:24px">아시아 최고의<br>식품을 전합니다</h2>
+          <p style="font-size:15px;color:var(--text-light);line-height:1.9;margin-bottom:16px">SAYWEE는 "Say Wee!" – 맛있어서 저절로 나오는 감탄사에서 탄생했습니다. 우리는 전 세계의 아시아 식품 팬들이 진짜 아시아의 맛을 경험할 수 있도록 7개국의 정통 식품을 엄선하여 제공합니다.</p>
+          <p style="font-size:15px;color:var(--text-light);line-height:1.9">한국의 라면부터 대만의 버블티 키트까지, 베트남 커피부터 일본 말차까지 – SAYWEE에서는 진짜 아시아를 만날 수 있습니다.</p>
+        </div>
+        <div style="border-radius:var(--radius-xl);overflow:hidden;aspect-ratio:4/3">
+          <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80" alt="About SAYWEE" style="width:100%;height:100%;object-fit:cover">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section section-alt">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center">
+        <div class="fade-in">
+          <div style="font-size:56px;font-weight:900;letter-spacing:-3px;margin-bottom:8px">7</div>
+          <div style="font-size:14px;font-weight:600">Countries</div>
+          <div style="font-size:12px;color:var(--text-muted)">Korea, Japan, China, Vietnam, Thailand, India, Taiwan</div>
+        </div>
+        <div class="fade-in fade-in-delay-1">
+          <div style="font-size:56px;font-weight:900;letter-spacing:-3px;margin-bottom:8px">500+</div>
+          <div style="font-size:14px;font-weight:600">Products</div>
+          <div style="font-size:12px;color:var(--text-muted)">Curated authentic Asian foods</div>
+        </div>
+        <div class="fade-in fade-in-delay-2">
+          <div style="font-size:56px;font-weight:900;letter-spacing:-3px;margin-bottom:8px">50K+</div>
+          <div style="font-size:14px;font-weight:600">Happy Customers</div>
+          <div style="font-size:12px;color:var(--text-muted)">Across 30+ countries worldwide</div>
+        </div>
+        <div class="fade-in fade-in-delay-3">
+          <div style="font-size:56px;font-weight:900;letter-spacing:-3px;margin-bottom:8px">4.9★</div>
+          <div style="font-size:14px;font-weight:600">Average Rating</div>
+          <div style="font-size:12px;color:var(--text-muted)">Based on 12,000+ reviews</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px">
+        <div class="eyebrow" style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">What We Stand For</div>
+        <h2 style="font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px">Our Values</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+        <div class="fade-in" style="padding:36px;background:var(--secondary);border-radius:var(--radius-xl)">
+          <div style="font-size:40px;margin-bottom:16px">🌏</div>
+          <h3 style="font-size:18px;font-weight:700;margin-bottom:10px">Authenticity</h3>
+          <p style="font-size:14px;color:var(--text-light);line-height:1.7">Every product we carry is sourced directly from manufacturers and trusted local partners in each country. No imitations, no shortcuts.</p>
+        </div>
+        <div class="fade-in fade-in-delay-1" style="padding:36px;background:var(--secondary);border-radius:var(--radius-xl)">
+          <div style="font-size:40px;margin-bottom:16px">✨</div>
+          <h3 style="font-size:18px;font-weight:700;margin-bottom:10px">Quality</h3>
+          <p style="font-size:14px;color:var(--text-light);line-height:1.7">We inspect every shipment for freshness and quality. If a product doesn't meet our standards, it doesn't reach our customers.</p>
+        </div>
+        <div class="fade-in fade-in-delay-2" style="padding:36px;background:var(--secondary);border-radius:var(--radius-xl)">
+          <div style="font-size:40px;margin-bottom:16px">🤝</div>
+          <h3 style="font-size:18px;font-weight:700;margin-bottom:10px">Community</h3>
+          <p style="font-size:14px;color:var(--text-light);line-height:1.7">We celebrate Asian food culture and the communities that create it. A portion of every sale supports Asian food artisans and small producers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="section section-alt">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:48px">
+        <div class="eyebrow" style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">The People</div>
+        <h2 style="font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px">Meet the Team</h2>
+      </div>
+      <div class="team-grid">
+        <div class="team-card fade-in">
+          <div class="team-avatar"><img src="https://images.unsplash.com/photo-1494790108755-2616b612b77c?w=400&q=80" alt="CEO"></div>
+          <div class="team-name">Ji-yeon Park</div>
+          <div class="team-role">CEO & Co-founder</div>
+        </div>
+        <div class="team-card fade-in fade-in-delay-1">
+          <div class="team-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="CTO"></div>
+          <div class="team-name">Kenji Tanaka</div>
+          <div class="team-role">CTO & Co-founder</div>
+        </div>
+        <div class="team-card fade-in fade-in-delay-2">
+          <div class="team-avatar"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80" alt="Head of Buying"></div>
+          <div class="team-name">Linh Nguyen</div>
+          <div class="team-role">Head of Buying</div>
+        </div>
+        <div class="team-card fade-in fade-in-delay-3">
+          <div class="team-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80" alt="Marketing"></div>
+          <div class="team-name">Arjun Sharma</div>
+          <div class="team-role">Head of Marketing</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="section" id="reviews">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:48px">
+        <div class="eyebrow" style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">Testimonials</div>
+        <h2 style="font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px" data-lang="section_reviews">고객 리뷰</h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card fade-in">
+          <div class="review-header"><div class="reviewer-avatar">A</div><div><div class="reviewer-name">Aiko M.</div><div class="reviewer-meta">🇬🇧 UK · Verified</div></div></div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-title">My go-to for Japanese snacks</div>
+          <div class="review-body">SAYWEE is the only place I trust for authentic Japanese treats. Pocky, Calbee, Yakult – all exactly as they should be. Fast delivery, great packaging.</div>
+        </div>
+        <div class="review-card fade-in fade-in-delay-1">
+          <div class="review-header"><div class="reviewer-avatar">T</div><div><div class="reviewer-name">Thanh P.</div><div class="reviewer-meta">🇫🇷 France · Verified</div></div></div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-title">G7 Coffee = life</div>
+          <div class="review-body">As a Vietnamese living in Paris, finding genuine G7 coffee was a miracle. SAYWEE ships fast and the products are 100% authentic. Best discovery of 2025!</div>
+        </div>
+        <div class="review-card fade-in fade-in-delay-2">
+          <div class="review-header"><div class="reviewer-avatar">R</div><div><div class="reviewer-name">Raj K.</div><div class="reviewer-meta">🇨🇦 Canada · Verified</div></div></div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-title">Finally real MDH spices!</div>
+          <div class="review-body">The Indian food selection is outstanding. MDH spices, Haldiram's snacks, Maggi noodles – all my childhood favorites at great prices.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="newsletter-section">
+    <div class="container">
+      <h2 data-lang="newsletter_title">특별 혜택을 먼저 받아보세요</h2>
+      <p data-lang="newsletter_sub">신상품 소식, 할인 쿠폰, 이벤트를 이메일로 받아보세요.</p>
+      <form class="newsletter-form" id="newsletter-form">
+        <input type="email" placeholder="이메일 주소를 입력하세요" required>
+        <button type="submit" data-lang="newsletter_btn">구독하기</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div><p data-lang="footer_about">세이위는 7개국 최고의 아시아 식품을 한 곳에서 만날 수 있는 프리미엄 마켓플레이스입니다.</p><div class="social-links"><a href="#" class="social-link">📘</a><a href="#" class="social-link">📸</a><a href="#" class="social-link">🐦</a></div></div>
+      <div class="footer-col"><h4 data-lang="footer_shop">쇼핑</h4><ul><li><a href="shop.html">All Products</a></li><li><a href="shop.html?sort=bestseller">Best Sellers</a></li><li><a href="shop.html?sort=new">New Arrivals</a></li></ul></div>
+      <div class="footer-col"><h4 data-lang="footer_company">회사</h4><ul><li><a href="about.html">About</a></li><li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h4 data-lang="footer_support">고객지원</h4><ul><li><a href="#">FAQ</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span data-lang="footer_copyright">© 2025 SAYWEE. All rights reserved.</span></div>
+  </div>
+</footer>
+<script src="js/language.js"></script>
+<script src="js/products.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

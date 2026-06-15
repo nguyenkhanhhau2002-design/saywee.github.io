@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – SAYWEE</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { background: #f5f5f5; }
+    .admin-layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; padding-top: 0; }
+    main { padding-top: 0 !important; }
+    .chart-bar-wrap { display: flex; align-items: flex-end; gap: 6px; height: 120px; margin-top: 16px; }
+    .chart-bar { flex: 1; background: var(--primary); border-radius: 4px 4px 0 0; position: relative; transition: all 0.4s ease; }
+    .chart-bar:hover { background: var(--text); }
+    .chart-bar span { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+    .mini-chart { display: flex; align-items: flex-end; gap: 2px; height: 40px; }
+    .mini-bar { flex: 1; border-radius: 2px 2px 0 0; }
+    .progress-ring { transform: rotate(-90deg); }
+    .donut-chart { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+    .donut-center { position: absolute; text-align: center; }
+    @media (max-width: 992px) {
+      .admin-layout { grid-template-columns: 1fr; }
+      .admin-sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">SAY<span>WEE</span> <span style="font-size:11px;opacity:0.5;font-weight:400;margin-left:4px">Admin</span></div>
+    <nav class="admin-nav">
+      <div class="admin-nav-label">Main</div>
+      <div class="admin-nav-item active" onclick="showPanel('dashboard')">📊 Dashboard</div>
+      <div class="admin-nav-item" onclick="showPanel('orders')">📦 Orders</div>
+      <div class="admin-nav-item" onclick="showPanel('products')">🛒 Products</div>
+      <div class="admin-nav-item" onclick="showPanel('customers')">👥 Customers</div>
+      <div class="admin-nav-label">Manage</div>
+      <div class="admin-nav-item" onclick="showPanel('inventory')">📋 Inventory</div>
+      <div class="admin-nav-item" onclick="showPanel('analytics')">📈 Analytics</div>
+      <div class="admin-nav-item" onclick="showPanel('reviews')">⭐ Reviews</div>
+      <div class="admin-nav-item" onclick="showPanel('coupons')">🎟 Coupons</div>
+      <div class="admin-nav-label">Settings</div>
+      <div class="admin-nav-item" onclick="showPanel('settings')">⚙️ Settings</div>
+      <div class="admin-nav-item" onclick="window.location.href='index.html'">🌐 View Site</div>
+    </nav>
+    <div style="padding:20px;border-top:1px solid rgba(255,255,255,0.08);margin-top:auto">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text)">A</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:white">Admin</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4)">admin@saywee.com</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+
+    <!-- DASHBOARD PANEL -->
+    <div id="panel-dashboard">
+      <div class="admin-topbar">
+        <div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Sunday, June 7, 2025</div>
+          <h1>Dashboard</h1>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button style="padding:10px 20px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:600;background:var(--bg);cursor:pointer">Export Report</button>
+          <button style="padding:10px 20px;background:var(--primary);border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer" onclick="showToast('Report generated!','success')">+ New Product</button>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="admin-stats">
+        <div class="admin-stat-card">
+          <div class="label">Total Revenue</div>
+          <div class="value">$84,621</div>
+          <div class="change up">↑ +12.5% vs last month</div>
+          <div class="mini-chart" style="margin-top:8px">
+            <div class="mini-bar" style="height:60%;background:#F8E400;opacity:0.4"></div>
+            <div class="mini-bar" style="height:45%;background:#F8E400;opacity:0.4"></div>
+            <div class="mini-bar" style="height:70%;background:#F8E400;opacity:0.5"></div>
+            <div class="mini-bar" style="height:55%;background:#F8E400;opacity:0.5"></div>
+            <div class="mini-bar" style="height:80%;background:#F8E400;opacity:0.6"></div>
+            <div class="mini-bar" style="height:90%;background:#F8E400;opacity:0.7"></div>
+            <div class="mini-bar" style="height:100%;background:#F8E400"></div>
+          </div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="label">Total Orders</div>
+          <div class="value">2,847</div>
+          <div class="change up">↑ +8.3% vs last month</div>
+          <div class="mini-chart" style="margin-top:8px">
+            <div class="mini-bar" style="height:50%;background:#111;opacity:0.15"></div>
+            <div class="mini-bar" style="height:65%;background:#111;opacity:0.2"></div>
+            <div class="mini-bar" style="height:55%;background:#111;opacity:0.25"></div>
+            <div class="mini-bar" style="height:75%;background:#111;opacity:0.3"></div>
+            <div class="mini-bar" style="height:60%;background:#111;opacity:0.35"></div>
+            <div class="mini-bar" style="height:85%;background:#111;opacity:0.4"></div>
+            <div class="mini-bar" style="height:100%;background:#111;opacity:0.5"></div>
+          </div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="label">Total Customers</div>
+          <div class="value">51,429</div>
+          <div class="change up">↑ +5.1% vs last month</div>
+          <div class="mini-chart" style="margin-top:8px">
+            <div class="mini-bar" style="height:40%;background:#22c55e;opacity:0.4"></div>
+            <div class="mini-bar" style="height:55%;background:#22c55e;opacity:0.4"></div>
+            <div class="mini-bar" style="height:65%;background:#22c55e;opacity:0.5"></div>
+            <div class="mini-bar" style="height:70%;background:#22c55e;opacity:0.6"></div>
+            <div class="mini-bar" style="height:80%;background:#22c55e;opacity:0.7"></div>
+            <div class="mini-bar" style="height:90%;background:#22c55e;opacity:0.8"></div>
+            <div class="mini-bar" style="height:100%;background:#22c55e"></div>
+          </div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="label">Avg Order Value</div>
+          <div class="value">$29.73</div>
+          <div class="change down">↓ -1.2% vs last month</div>
+          <div class="mini-chart" style="margin-top:8px">
+            <div class="mini-bar" style="height:90%;background:#f59e0b;opacity:0.4"></div>
+            <div class="mini-bar" style="height:85%;background:#f59e0b;opacity:0.4"></div>
+            <div class="mini-bar" style="height:95%;background:#f59e0b;opacity:0.5"></div>
+            <div class="mini-bar" style="height:80%;background:#f59e0b;opacity:0.5"></div>
+            <div class="mini-bar" style="height:85%;background:#f59e0b;opacity:0.6"></div>
+            <div class="mini-bar" style="height:75%;background:#f59e0b;opacity:0.7"></div>
+            <div class="mini-bar" style="height:70%;background:#f59e0b"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Chart + Breakdown -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:24px">
+        <!-- Revenue Chart -->
+        <div class="admin-table-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <h3>Revenue Overview</h3>
+            <select style="font-size:12px;border:1px solid var(--border);padding:4px 8px;border-radius:4px;background:var(--bg)">
+              <option>Last 7 Days</option>
+              <option>Last 30 Days</option>
+              <option>Last 3 Months</option>
+            </select>
+          </div>
+          <div style="font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:4px">$12,840</div>
+          <div style="font-size:12px;color:#22c55e;margin-bottom:16px">↑ +18.2% from last period</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="height:65%"><span>Mon</span></div>
+            <div class="chart-bar" style="height:45%"><span>Tue</span></div>
+            <div class="chart-bar" style="height:80%"><span>Wed</span></div>
+            <div class="chart-bar" style="height:60%"><span>Thu</span></div>
+            <div class="chart-bar" style="height:90%"><span>Fri</span></div>
+            <div class="chart-bar" style="height:75%"><span>Sat</span></div>
+            <div class="chart-bar" style="height:100%"><span>Sun</span></div>
+          </div>
+          <div style="margin-top:28px"></div>
+        </div>
+
+        <!-- Country Breakdown -->
+        <div class="admin-table-section">
+          <h3 style="margin-bottom:16px">Sales by Country</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🇰🇷 Korea</span><span style="font-weight:700">38%</span></div>
+              <div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:38%;background:var(--primary);border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🇯🇵 Japan</span><span style="font-weight:700">24%</span></div>
+              <div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:24%;background:#111;border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🇨🇳 China</span><span style="font-weight:700">14%</span></div>
+              <div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:14%;background:#f59e0b;border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🇻🇳 Vietnam</span><span style="font-weight:700">10%</span></div>
+              <div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:10%;background:#22c55e;border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🇹🇭 Thailand</span><span style="font-weight:700">7%</span></div>
+              <div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:7%;background:#3b82f6;border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🇮🇳 India</span><span style="font-weight:700">4%</span></div>
+              <div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:4%;background:#ec4899;border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🇹🇼 Taiwan</span><span style="font-weight:700">3%</span></div>
+              <div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:3%;background:#8b5cf6;border-radius:3px"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders + Top Products -->
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:20px">
+        <!-- Recent Orders -->
+        <div class="admin-table-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <h3>Recent Orders</h3>
+            <button onclick="showPanel('orders')" style="font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer">View All →</button>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Products</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recent-orders-body">
+              <tr><td>#SW-4821</td><td>Sarah K.</td><td>Shin Ramyun × 3</td><td>$11.97</td><td><span class="status-badge delivered">Delivered</span></td></tr>
+              <tr><td>#SW-4820</td><td>James L.</td><td>G7 Coffee, Kimchi</td><td>$20.98</td><td><span class="status-badge processing">Processing</span></td></tr>
+              <tr><td>#SW-4819</td><td>Mia T.</td><td>Pocky × 2, Yakult</td><td>$13.97</td><td><span class="status-badge pending">Pending</span></td></tr>
+              <tr><td>#SW-4818</td><td>David P.</td><td>Haidilao Hot Pot</td><td>$7.99</td><td><span class="status-badge delivered">Delivered</span></td></tr>
+              <tr><td>#SW-4817</td><td>Emma S.</td><td>Bubble Tea Kit</td><td>$14.99</td><td><span class="status-badge cancelled">Cancelled</span></td></tr>
+              <tr><td>#SW-4816</td><td>Linh N.</td><td>Pho Noodles × 5</td><td>$19.95</td><td><span class="status-badge delivered">Delivered</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Top Products -->
+        <div class="admin-table-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <h3>Top Products</h3>
+            <button onclick="showPanel('products')" style="font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer">View All →</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px" id="top-products-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS PANEL -->
+    <div id="panel-orders" style="display:none">
+      <div class="admin-topbar">
+        <h1>Orders</h1>
+        <button style="padding:10px 20px;background:var(--primary);border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer" onclick="showToast('Exported!','success')">Export CSV</button>
+      </div>
+      <!-- Filters -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+        <button style="padding:8px 16px;background:var(--text);color:white;border-radius:50px;font-size:12px;font-weight:700;cursor:pointer">All (2847)</button>
+        <button style="padding:8px 16px;background:var(--bg);border:1px solid var(--border);border-radius:50px;font-size:12px;font-weight:600;cursor:pointer">Pending (42)</button>
+        <button style="padding:8px 16px;background:var(--bg);border:1px solid var(--border);border-radius:50px;font-size:12px;font-weight:600;cursor:pointer">Processing (128)</button>
+        <button style="padding:8px 16px;background:var(--bg);border:1px solid var(--border);border-radius:50px;font-size:12px;font-weight:600;cursor:pointer">Delivered (2650)</button>
+        <button style="padding:8px 16px;background:var(--bg);border:1px solid var(--border);border-radius:50px;font-size:12px;font-weight:600;cursor:pointer">Cancelled (27)</button>
+      </div>
+      <div class="admin-table-section">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Order ID</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>#SW-4821</td><td>Jun 7, 2025</td><td>Sarah K. (US)</td><td>Shin Ramyun × 3</td><td>$11.97</td><td><span class="status-badge delivered">Delivered</span></td><td><button onclick="showToast('Order details','warning')" style="font-size:12px;font-weight:600;color:var(--text-light);cursor:pointer">View</button></td></tr>
+            <tr><td>#SW-4820</td><td>Jun 7, 2025</td><td>James L. (AU)</td><td>G7 Coffee, Bibigo Kimchi</td><td>$20.98</td><td><span class="status-badge processing">Processing</span></td><td><button onclick="showToast('Order details','warning')" style="font-size:12px;font-weight:600;color:var(--text-light);cursor:pointer">View</button></td></tr>
+            <tr><td>#SW-4819</td><td>Jun 6, 2025</td><td>Mia T. (DE)</td><td>Pocky × 2, Yakult × 5</td><td>$13.97</td><td><span class="status-badge pending">Pending</span></td><td><button onclick="showToast('Order details','warning')" style="font-size:12px;font-weight:600;color:var(--text-light);cursor:pointer">View</button></td></tr>
+            <tr><td>#SW-4818</td><td>Jun 6, 2025</td><td>David P. (UK)</td><td>Haidilao Hot Pot Base</td><td>$7.99</td><td><span class="status-badge delivered">Delivered</span></td><td><button onclick="showToast('Order details','warning')" style="font-size:12px;font-weight:600;color:var(--text-light);cursor:pointer">View</button></td></tr>
+            <tr><td>#SW-4817</td><td>Jun 5, 2025</td><td>Emma S. (FR)</td><td>Brown Sugar Boba Kit</td><td>$16.99</td><td><span class="status-badge cancelled">Cancelled</span></td><td><button onclick="showToast('Order details','warning')" style="font-size:12px;font-weight:600;color:var(--text-light);cursor:pointer">View</button></td></tr>
+            <tr><td>#SW-4816</td><td>Jun 5, 2025</td><td>Linh N. (CA)</td><td>Pho Noodles × 5</td><td>$19.95</td><td><span class="status-badge delivered">Delivered</span></td><td><button onclick="showToast('Order details','warning')" style="font-size:12px;font-weight:600;color:var(--text-light);cursor:pointer">View</button></td></tr>
+            <tr><td>#SW-4815</td><td>Jun 5, 2025</td><td>Raj K. (CA)</td><td>MDH Curry, Basmati Rice</td><td>$23.98</td><td><span class="status-badge delivered">Delivered</span></td><td><button onclick="showToast('Order details','warning')" style="font-size:12px;font-weight:600;color:var(--text-light);cursor:pointer">View</button></td></tr>
+            <tr><td>#SW-4814</td><td>Jun 4, 2025</td><td>Yuki T. (JP)</td><td>Pineapple Cake × 2</td><td>$45.98</td><td><span class="status-badge processing">Processing</span></td><td><button onclick="showToast('Order details','warning')" style="font-size:12px;font-weight:600;color:var(--text-light);cursor:pointer">View</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PRODUCTS PANEL -->
+    <div id="panel-products" style="display:none">
+      <div class="admin-topbar">
+        <h1>Products</h1>
+        <div style="display:flex;gap:10px">
+          <button style="padding:10px 20px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:600;background:var(--bg);cursor:pointer">Import CSV</button>
+          <button style="padding:10px 20px;background:var(--primary);border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer" onclick="showToast('Add product form coming soon','warning')">+ Add Product</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:20px">
+        <input type="text" placeholder="Search products..." style="flex:1;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text);background:var(--bg)" id="admin-product-search" oninput="filterAdminProducts()">
+        <select style="padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--bg)" onchange="filterAdminProducts()">
+          <option value="">All Countries</option>
+          <option value="Korea">Korea</option>
+          <option value="Japan">Japan</option>
+          <option value="China">China</option>
+          <option value="Vietnam">Vietnam</option>
+          <option value="Thailand">Thailand</option>
+          <option value="India">India</option>
+          <option value="Taiwan">Taiwan</option>
+        </select>
+      </div>
+      <div class="admin-table-section">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Product</th><th>Brand</th><th>Country</th><th>Category</th><th>Price</th><th>Stock</th><th>Rating</th><th>Action</th></tr>
+          </thead>
+          <tbody id="admin-products-body">
+            <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">Loading products...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS PANEL -->
+    <div id="panel-customers" style="display:none">
+      <div class="admin-topbar"><h1>Customers</h1></div>
+      <div class="admin-stats" style="grid-template-columns:repeat(3,1fr)">
+        <div class="admin-stat-card"><div class="label">Total Customers</div><div class="value">51,429</div><div class="change up">↑ +5.1%</div></div>
+        <div class="admin-stat-card"><div class="label">New This Month</div><div class="value">1,284</div><div class="change up">↑ +12.3%</div></div>
+        <div class="admin-stat-card"><div class="label">Repeat Buyers</div><div class="value">68%</div><div class="change up">↑ +2.1%</div></div>
+      </div>
+      <div class="admin-table-section">
+        <h3 style="margin-bottom:16px">Customer List</h3>
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Country</th><th>Orders</th><th>Total Spent</th><th>Joined</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Sarah K.</td><td>sarah@example.com</td><td>🇺🇸 US</td><td>12</td><td>$289.40</td><td>Jan 2024</td><td><span class="status-badge delivered">Active</span></td></tr>
+            <tr><td>James L.</td><td>james@example.com</td><td>🇦🇺 AU</td><td>8</td><td>$198.60</td><td>Mar 2024</td><td><span class="status-badge delivered">Active</span></td></tr>
+            <tr><td>Mia T.</td><td>mia@example.com</td><td>🇩🇪 DE</td><td>5</td><td>$124.30</td><td>Jun 2024</td><td><span class="status-badge delivered">Active</span></td></tr>
+            <tr><td>Linh N.</td><td>linh@example.com</td><td>🇫🇷 FR</td><td>19</td><td>$512.80</td><td>Oct 2023</td><td><span class="status-badge delivered">Active</span></td></tr>
+            <tr><td>Raj K.</td><td>raj@example.com</td><td>🇨🇦 CA</td><td>7</td><td>$176.90</td><td>Apr 2024</td><td><span class="status-badge delivered">Active</span></td></tr>
+            <tr><td>Emma S.</td><td>emma@example.com</td><td>🇬🇧 UK</td><td>3</td><td>$64.70</td><td>Nov 2024</td><td><span class="status-badge pending">Inactive</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ANALYTICS PANEL -->
+    <div id="panel-analytics" style="display:none">
+      <div class="admin-topbar"><h1>Analytics</h1></div>
+      <div class="admin-stats">
+        <div class="admin-stat-card"><div class="label">Page Views</div><div class="value">284,921</div><div class="change up">↑ +22.4%</div></div>
+        <div class="admin-stat-card"><div class="label">Conversion Rate</div><div class="value">3.8%</div><div class="change up">↑ +0.5%</div></div>
+        <div class="admin-stat-card"><div class="label">Bounce Rate</div><div class="value">38.2%</div><div class="change down">↓ -2.1%</div></div>
+        <div class="admin-stat-card"><div class="label">Avg Session</div><div class="value">4m 32s</div><div class="change up">↑ +18s</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="admin-table-section">
+          <h3 style="margin-bottom:16px">Top Pages</h3>
+          <table class="admin-table">
+            <thead><tr><th>Page</th><th>Views</th><th>Bounce</th></tr></thead>
+            <tbody>
+              <tr><td>/shop.html</td><td>48,201</td><td>32%</td></tr>
+              <tr><td>/product.html (Shin Ramyun)</td><td>22,840</td><td>28%</td></tr>
+              <tr><td>/index.html</td><td>19,210</td><td>41%</td></tr>
+              <tr><td>/product.html (G7 Coffee)</td><td>14,320</td><td>25%</td></tr>
+              <tr><td>/product.html (Bubble Tea)</td><td>12,890</td><td>30%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="admin-table-section">
+          <h3 style="margin-bottom:16px">Traffic Sources</h3>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🔍 Organic Search</span><span style="font-weight:700">42%</span></div><div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:42%;background:#22c55e;border-radius:3px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>📱 Social Media</span><span style="font-weight:700">28%</span></div><div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:28%;background:#3b82f6;border-radius:3px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>📧 Email</span><span style="font-weight:700">18%</span></div><div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:18%;background:var(--primary);border-radius:3px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🔗 Direct</span><span style="font-weight:700">12%</span></div><div style="height:6px;background:var(--secondary);border-radius:3px"><div style="height:100%;width:12%;background:#8b5cf6;border-radius:3px"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEWS PANEL -->
+    <div id="panel-reviews" style="display:none">
+      <div class="admin-topbar"><h1>Reviews</h1></div>
+      <div class="admin-stats" style="grid-template-columns:repeat(3,1fr)">
+        <div class="admin-stat-card"><div class="label">Total Reviews</div><div class="value">12,481</div><div class="change up">↑ +8.4%</div></div>
+        <div class="admin-stat-card"><div class="label">Avg Rating</div><div class="value">4.8 ★</div><div class="change up">↑ +0.1</div></div>
+        <div class="admin-stat-card"><div class="label">5-Star Rate</div><div class="value">78%</div><div class="change up">↑ +2%</div></div>
+      </div>
+      <div class="admin-table-section">
+        <h3 style="margin-bottom:16px">Recent Reviews</h3>
+        <table class="admin-table">
+          <thead><tr><th>Customer</th><th>Product</th><th>Rating</th><th>Review</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Sarah K.</td><td>Shin Ramyun</td><td>⭐⭐⭐⭐⭐</td><td>"Absolutely love it! Just like I remember."</td><td>Jun 5</td><td><span class="status-badge delivered">Published</span></td></tr>
+            <tr><td>James L.</td><td>G7 Coffee</td><td>⭐⭐⭐⭐⭐</td><td>"Best Vietnamese coffee outside Vietnam!"</td><td>Jun 4</td><td><span class="status-badge delivered">Published</span></td></tr>
+            <tr><td>Mia T.</td><td>Bubble Tea Kit</td><td>⭐⭐⭐⭐</td><td>"Good quality, easy to make at home."</td><td>Jun 3</td><td><span class="status-badge pending">Pending</span></td></tr>
+            <tr><td>David P.</td><td>Lao Gan Ma</td><td>⭐⭐⭐⭐⭐</td><td>"On everything. Literally everything."</td><td>Jun 2</td><td><span class="status-badge delivered">Published</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COUPONS PANEL -->
+    <div id="panel-coupons" style="display:none">
+      <div class="admin-topbar">
+        <h1>Coupons</h1>
+        <button style="padding:10px 20px;background:var(--primary);border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer" onclick="showToast('Coupon created!','success')">+ Create Coupon</button>
+      </div>
+      <div class="admin-table-section">
+        <table class="admin-table">
+          <thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Usage</th><th>Expiry</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td style="font-family:monospace;font-weight:700">SAYWEE10</td><td>Percentage</td><td>10% off</td><td>1,284 / 5,000</td><td>Dec 31, 2025</td><td><span class="status-badge delivered">Active</span></td></tr>
+            <tr><td style="font-family:monospace;font-weight:700">FREESHIP</td><td>Free Shipping</td><td>Free shipping</td><td>892 / unlimited</td><td>Jun 30, 2025</td><td><span class="status-badge delivered">Active</span></td></tr>
+            <tr><td style="font-family:monospace;font-weight:700">WELCOME15</td><td>Percentage</td><td>15% off (new users)</td><td>3,210 / 10,000</td><td>Dec 31, 2025</td><td><span class="status-badge delivered">Active</span></td></tr>
+            <tr><td style="font-family:monospace;font-weight:700">SUMMER20</td><td>Percentage</td><td>20% off</td><td>2,145 / 2,000</td><td>Aug 31, 2025</td><td><span class="status-badge cancelled">Expired</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INVENTORY PANEL -->
+    <div id="panel-inventory" style="display:none">
+      <div class="admin-topbar"><h1>Inventory</h1></div>
+      <div class="admin-stats" style="grid-template-columns:repeat(3,1fr)">
+        <div class="admin-stat-card"><div class="label">Total SKUs</div><div class="value">487</div></div>
+        <div class="admin-stat-card"><div class="label">Low Stock (&lt;10)</div><div class="value" style="color:#f59e0b">23</div><div class="change" style="color:#f59e0b">⚠ Needs restocking</div></div>
+        <div class="admin-stat-card"><div class="label">Out of Stock</div><div class="value" style="color:#ef4444">4</div><div class="change down">↓ Action required</div></div>
+      </div>
+      <div class="admin-table-section">
+        <h3 style="margin-bottom:16px">Low Stock Alert</h3>
+        <table class="admin-table">
+          <thead><tr><th>Product</th><th>Country</th><th>Current Stock</th><th>Reorder Level</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Shin Ramyun (24pk)</td><td>🇰🇷 Korea</td><td style="color:#ef4444;font-weight:700">2</td><td>50</td><td><span class="status-badge cancelled">Critical</span></td></tr>
+            <tr><td>G7 Coffee 3in1</td><td>🇻🇳 Vietnam</td><td style="color:#f59e0b;font-weight:700">8</td><td>30</td><td><span class="status-badge pending">Low</span></td></tr>
+            <tr><td>Lao Gan Ma Chili</td><td>🇨🇳 China</td><td style="color:#f59e0b;font-weight:700">6</td><td>25</td><td><span class="status-badge pending">Low</span></td></tr>
+            <tr><td>Bubble Tea Kit</td><td>🇹🇼 Taiwan</td><td style="color:#ef4444;font-weight:700">0</td><td>20</td><td><span class="status-badge cancelled">Out of Stock</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS PANEL -->
+    <div id="panel-settings" style="display:none">
+      <div class="admin-topbar"><h1>Settings</h1></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="admin-table-section">
+          <h3 style="margin-bottom:20px">Store Settings</h3>
+          <div class="form-group"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Store Name</label><input type="text" value="SAYWEE" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--bg)"></div>
+          <div class="form-group" style="margin-top:12px"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Contact Email</label><input type="email" value="hello@saywee.com" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--bg)"></div>
+          <div class="form-group" style="margin-top:12px"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Currency</label><select style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--bg)"><option>USD ($)</option><option>EUR (€)</option><option>KRW (₩)</option></select></div>
+          <button onclick="showToast('Settings saved!','success')" style="margin-top:20px;padding:10px 24px;background:var(--primary);border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer">Save Changes</button>
+        </div>
+        <div class="admin-table-section">
+          <h3 style="margin-bottom:20px">Shipping Settings</h3>
+          <div class="form-group"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Standard Shipping Fee</label><input type="text" value="$5.99" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--bg)"></div>
+          <div class="form-group" style="margin-top:12px"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Free Shipping Threshold</label><input type="text" value="$35.00" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--bg)"></div>
+          <div class="form-group" style="margin-top:12px"><label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Default Delivery Time</label><input type="text" value="3-7 business days" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--bg)"></div>
+          <button onclick="showToast('Shipping settings saved!','success')" style="margin-top:20px;padding:10px 24px;background:var(--primary);border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end admin-main -->
+</div><!-- end admin-layout -->
+
+<script src="js/language.js"></script>
+<script src="js/products.js"></script>
+<script src="js/script.js"></script>
+<script>
+// Panel navigation
+function showPanel(name) {
+  document.querySelectorAll('[id^="panel-"]').forEach(p => p.style.display = 'none');
+  const panel = document.getElementById('panel-' + name);
+  if (panel) panel.style.display = '';
+  document.querySelectorAll('.admin-nav-item').forEach(item => {
+    item.classList.toggle('active', item.textContent.toLowerCase().includes(name.substring(0,4)));
+  });
+}
+
+// Load top products
+document.addEventListener('productsLoaded', () => {
+  const top = getBestsellers(5);
+  const container = document.getElementById('top-products-list');
+  if (container) {
+    container.innerHTML = top.map((p, i) => `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light)">
+        <span style="font-size:13px;font-weight:700;color:var(--text-muted);width:16px">${i+1}</span>
+        <img src="${p.image}" alt="${p.name}" style="width:40px;height:40px;border-radius:var(--radius-sm);object-fit:cover" onerror="this.src='https://images.unsplash.com/photo-1547592180-85f173990554?w=100'">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${p.sold.toLocaleString()} sold</div>
+        </div>
+        <div style="font-size:13px;font-weight:700">${formatPrice(p.price)}</div>
+      </div>
+    `).join('');
+  }
+
+  // Admin products table
+  const tbody = document.getElementById('admin-products-body');
+  if (tbody) {
+    const products = ALL_PRODUCTS;
+    tbody.innerHTML = products.map(p => `
+      <tr>
+        <td style="display:flex;align-items:center;gap:10px;padding:10px 12px">
+          <img src="${p.image}" alt="${p.name}" class="admin-product-img" onerror="this.src='https://images.unsplash.com/photo-1547592180-85f173990554?w=100'">
+          <span style="font-size:13px;font-weight:600">${p.name}</span>
+        </td>
+        <td>${p.brand}</td>
+        <td>${countryFlag(p.country)} ${p.country}</td>
+        <td>${p.category}</td>
+        <td style="font-weight:700">${formatPrice(p.price)}</td>
+        <td><span style="color:${Math.random() > 0.1 ? '#166534' : '#991b1b'};font-weight:700">${Math.floor(Math.random()*200+10)}</span></td>
+        <td>${p.rating} ★</td>
+        <td>
+          <button onclick="window.open('product.html?id=${p.id}','_blank')" style="font-size:11px;font-weight:700;color:var(--text-light);margin-right:6px;cursor:pointer">View</button>
+          <button onclick="showToast('Edit coming soon','warning')" style="font-size:11px;font-weight:700;color:#3b82f6;cursor:pointer">Edit</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+});
+
+function filterAdminProducts() {
+  const q = document.getElementById('admin-product-search')?.value.toLowerCase() || '';
+  const rows = document.querySelectorAll('#admin-products-body tr');
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart – SAYWEE</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style id="brand-blue-override">
+/* SAYWEE Weee-style blue override */
+:root { --brand-green: #0D2DBD !important; --brand-green-dark: #0a1f8f !important; }
+.logo-brand { color: #0D2DBD !important; }
+.btn-primary, .add-to-cart-btn, .buy-now-btn { background: #0D2DBD !important; }
+a.btn-primary:hover, .btn-primary:hover { background: #0a1f8f !important; }
+.header { border-bottom: 3px solid #0D2DBD !important; }
+.hero-slider .slide-indicator.active { background: #0D2DBD !important; }
+.product-card-img img { object-fit: cover; width: 100%; height: 100%; }
+.hero-slide img { object-fit: cover; width: 100%; height: 100%; }
+</style>
+
+</head>
+<body>
+<div id="page-loader" class="page-loader"><div class="loader-logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div></div>
+<div id="toast-container" class="toast-container"></div>
+
+<header id="site-header">
+  <div class="header-inner">
+    <div class="header-logo"><a href="index.html">SAY<span style="background:#0D2DBD;color:white;">WEE</span></a></div>
+    <nav class="header-nav">
+      <ul>
+        <li><a href="index.html" data-lang="nav_home">홈</a></li>
+        <li><a href="shop.html" data-lang="nav_shop">쇼핑</a></li>
+        <li><a href="about.html" data-lang="nav_about">소개</a></li>
+        <li><a href="contact.html" data-lang="nav_contact">문의</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="header-btn" id="search-btn">🔍</button>
+      <div class="lang-switcher">
+        <button class="lang-btn">🇰🇷 KR</button>
+        <div class="lang-dropdown">
+          <div class="lang-option active" data-lang="ko">🇰🇷 한국어</div>
+          <div class="lang-option" data-lang="en">🇺🇸 English</div>
+          <div class="lang-option" data-lang="vi">🇻🇳 Tiếng Việt</div>
+          <div class="lang-option" data-lang="ja">🇯🇵 日本語</div>
+          <div class="lang-option" data-lang="zh">🇨🇳 中文</div>
+        </div>
+      </div>
+      <a href="wishlist.html" class="header-btn">♡<span class="badge wishlist-badge" style="display:none">0</span></a>
+      <a href="login.html" class="header-btn login-link">👤</a>
+      <a href="cart.html" class="header-btn">🛒<span class="badge cart-badge" style="display:none">0</span></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div id="mobile-menu" class="mobile-menu">
+  <div class="mobile-menu-inner">
+    <ul>
+      <li><a href="index.html">홈</a></li>
+      <li><a href="shop.html">쇼핑</a></li>
+    </ul>
+  </div>
+</div>
+<div id="search-overlay" class="search-overlay">
+  <div style="width:100%;max-width:680px;margin:0 auto;padding:0 20px;">
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Search products...">
+      <button class="search-submit" onclick="document.getElementById('search-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="search-results-dropdown" id="search-results"></div>
+  </div>
+</div>
+
+<main>
+  <div style="background:var(--secondary);padding:40px 0;margin-bottom:0">
+    <div class="container">
+      <h1 style="font-size:36px;font-weight:800;letter-spacing:-1px" data-lang="cart_title">
+        장바구니
+        <span style="font-size:18px;font-weight:400;color:var(--text-muted);margin-left:8px">(<span id="cart-count">0</span> items)</span>
+      </h1>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- Empty State -->
+    <div id="cart-empty" class="empty-cart" style="display:none">
+      <div class="icon">🛒</div>
+      <h3 data-lang="cart_empty">장바구니가 비어 있습니다</h3>
+      <p data-lang="cart_empty_sub">쇼핑을 시작하고 좋아하는 상품을 담아보세요</p>
+      <a href="shop.html" class="go-shop" data-lang="go_shopping">쇼핑하러 가기</a>
+    </div>
+
+    <!-- Cart Content -->
+    <div class="cart-layout" id="cart-section" style="display:none">
+
+      <!-- Cart Items -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <h3 style="font-size:16px;font-weight:700">Items</h3>
+          <button id="clear-cart" style="font-size:13px;color:var(--text-muted);transition:all 0.2s" onmouseover="this.style.color='#ff4444'" onmouseout="this.style.color='var(--text-muted)'">Clear Cart</button>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+
+        <!-- Continue Shopping -->
+        <div style="margin-top:24px">
+          <a href="shop.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text-light);border:1px solid var(--border);padding:10px 20px;border-radius:50px;transition:all 0.2s" onmouseover="this.style.borderColor='var(--text)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-light)'">← Continue Shopping</a>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h3 data-lang="checkout">결제 정보</h3>
+
+        <div class="summary-row">
+          <span data-lang="subtotal">소계</span>
+          <span id="cart-subtotal">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span data-lang="shipping">배송비</span>
+          <span id="cart-shipping">$5.99</span>
+        </div>
+        <div class="summary-row" style="color:var(--text-muted);font-size:12px">
+          <span>Free shipping on orders over $35</span>
+        </div>
+        <div class="summary-row total">
+          <span data-lang="total">합계</span>
+          <span id="cart-total">$0.00</span>
+        </div>
+
+        <a href="checkout.html" id="checkout-btn" class="checkout-btn" style="display:block;text-align:center;text-decoration:none;" data-lang="checkout">결제하기 →</a>
+
+        <!-- Coupon -->
+        <div class="coupon-input-wrap">
+          <input type="text" class="coupon-input" id="coupon-input" placeholder="Coupon code" style="padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--bg);color:var(--text);flex:1">
+          <button class="coupon-apply" id="coupon-apply" data-lang="apply">적용</button>
+        </div>
+
+        <!-- Payment Icons -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;opacity:0.5">
+          <span style="font-size:11px;font-weight:600">SECURED BY</span>
+          <span style="font-size:20px">💳</span>
+          <span style="font-size:20px">🔒</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Recommended Products -->
+    <section class="section" style="border-top:1px solid var(--border);margin-top:40px;padding-top:60px">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="eyebrow">You might like</div>
+          <h2>관련 상품</h2>
+        </div>
+        <a href="shop.html" class="view-all" data-lang="view_all">전체 보기 →</a>
+      </div>
+      <div class="product-grid" id="recommended-grid"></div>
+    </section>
+  </div>
+</main>
+
+<footer id="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div>
+        <p data-lang="footer_about">세이위는 7개국 최고의 아시아 식품을 한 곳에서 만날 수 있는 프리미엄 마켓플레이스입니다.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_shop">쇼핑</h4>
+        <ul><li><a href="shop.html">All Products</a></li><li><a href="shop.html?sort=bestseller">Best Sellers</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_company">회사</h4>
+        <ul><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_support">고객지원</h4>
+        <ul><li><a href="#">FAQ</a></li><li><a href="#">Returns</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-lang="footer_copyright">© 2025 SAYWEE. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/language.js"></script>
+<script src="js/products.js"></script>
+<script src="js/script.js"></script>
+<script>
+document.addEventListener('productsLoaded', () => {
+  const rec = getBestsellers(4);
+  renderGrid(rec, document.getElementById('recommended-grid'));
+});
+</script>
+<script src="js/images.js"></script>
+</body>
+</html>

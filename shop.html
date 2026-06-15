@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop – SAYWEE</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style id="brand-blue-override">
+/* SAYWEE Weee-style blue override */
+:root { --brand-green: #0D2DBD !important; --brand-green-dark: #0a1f8f !important; }
+.logo-brand { color: #0D2DBD !important; }
+.btn-primary, .add-to-cart-btn, .buy-now-btn { background: #0D2DBD !important; }
+a.btn-primary:hover, .btn-primary:hover { background: #0a1f8f !important; }
+.header { border-bottom: 3px solid #0D2DBD !important; }
+.hero-slider .slide-indicator.active { background: #0D2DBD !important; }
+.product-card-img img { object-fit: cover; width: 100%; height: 100%; }
+.hero-slide img { object-fit: cover; width: 100%; height: 100%; }
+</style>
+
+</head>
+<body>
+<div id="page-loader" class="page-loader"><div class="loader-logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div></div>
+<div id="toast-container" class="toast-container"></div>
+
+<!-- HEADER -->
+<header id="site-header">
+  <div class="header-inner">
+    <div class="header-logo"><a href="index.html">SAY<span style="background:#0D2DBD;color:white;">WEE</span></a></div>
+    <nav class="header-nav">
+      <ul>
+        <li><a href="index.html" data-lang="nav_home">홈</a></li>
+        <li><a href="shop.html" data-lang="nav_shop" class="active">쇼핑</a></li>
+        <li><a href="shop.html" data-lang="nav_countries">국가별</a></li>
+        <li><a href="blog.html" data-lang="nav_event">이벤트</a></li>
+        <li><a href="blog.html" data-lang="nav_blog">블로그</a></li>
+        <li><a href="about.html" data-lang="nav_reviews">리뷰</a></li>
+        <li><a href="about.html" data-lang="nav_about">소개</a></li>
+        <li><a href="contact.html" data-lang="nav_contact">문의</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="header-btn" id="search-btn">🔍</button>
+      <div class="lang-switcher">
+        <button class="lang-btn">🇰🇷 KR</button>
+        <div class="lang-dropdown">
+          <div class="lang-option active" data-lang="ko">🇰🇷 한국어</div>
+          <div class="lang-option" data-lang="en">🇺🇸 English</div>
+          <div class="lang-option" data-lang="vi">🇻🇳 Tiếng Việt</div>
+          <div class="lang-option" data-lang="ja">🇯🇵 日本語</div>
+          <div class="lang-option" data-lang="zh">🇨🇳 中文</div>
+        </div>
+      </div>
+      <a href="wishlist.html" class="header-btn">♡<span class="badge wishlist-badge" style="display:none">0</span></a>
+      <a href="login.html" class="header-btn login-link">👤</a>
+      <a href="cart.html" class="header-btn">🛒<span class="badge cart-badge" style="display:none">0</span></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-menu" class="mobile-menu">
+  <div class="mobile-menu-inner">
+    <ul>
+      <li><a href="index.html" data-lang="nav_home">홈</a></li>
+      <li><a href="shop.html" data-lang="nav_shop">쇼핑</a></li>
+      <li><a href="about.html" data-lang="nav_about">소개</a></li>
+      <li><a href="contact.html" data-lang="nav_contact">문의</a></li>
+    </ul>
+  </div>
+</div>
+
+<div id="search-overlay" class="search-overlay">
+  <div style="width:100%;max-width:680px;margin:0 auto;padding:0 20px;">
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Search products...">
+      <button class="search-submit" onclick="document.getElementById('search-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="search-results-dropdown" id="search-results"></div>
+  </div>
+</div>
+
+<main>
+  <!-- Shop Header -->
+  <div class="shop-header">
+    <div class="container">
+      <h1 data-lang="nav_shop">쇼핑</h1>
+      <p>7개국의 프리미엄 아시아 식품을 만나보세요</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="shop-layout">
+
+      <!-- SIDEBAR FILTERS -->
+      <aside class="shop-sidebar">
+        <!-- Country Filter -->
+        <div class="filter-group">
+          <h4 data-lang="filter_country">국가</h4>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-country" value="Korea" id="f-korea">
+            <label for="f-korea">🇰🇷 한국</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-country" value="Japan" id="f-japan">
+            <label for="f-japan">🇯🇵 일본</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-country" value="China" id="f-china">
+            <label for="f-china">🇨🇳 중국</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-country" value="Vietnam" id="f-vietnam">
+            <label for="f-vietnam">🇻🇳 베트남</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-country" value="Thailand" id="f-thailand">
+            <label for="f-thailand">🇹🇭 태국</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-country" value="India" id="f-india">
+            <label for="f-india">🇮🇳 인도</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-country" value="Taiwan" id="f-taiwan">
+            <label for="f-taiwan">🇹🇼 대만</label>
+            <span class="filter-count">0</span>
+          </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <h4 data-lang="filter_category">카테고리</h4>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Instant Noodles" id="c-noodles">
+            <label for="c-noodles">🍜 Instant Noodles</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Asian Snacks" id="c-snacks">
+            <label for="c-snacks">🍿 Asian Snacks</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Asian Drinks" id="c-drinks">
+            <label for="c-drinks">🧋 Asian Drinks</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Sauces" id="c-sauces">
+            <label for="c-sauces">🫙 Sauces</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Tea" id="c-tea">
+            <label for="c-tea">🍵 Tea</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Coffee" id="c-coffee">
+            <label for="c-coffee">☕ Coffee</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Frozen Food" id="c-frozen">
+            <label for="c-frozen">🧊 Frozen Food</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Rice" id="c-rice">
+            <label for="c-rice">🍚 Rice</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Korean Food" id="c-korean">
+            <label for="c-korean">🇰🇷 Korean Food</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Japanese Food" id="c-japanese">
+            <label for="c-japanese">🇯🇵 Japanese Food</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Indian Food" id="c-indian">
+            <label for="c-indian">🇮🇳 Indian Food</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Thai Food" id="c-thai">
+            <label for="c-thai">🇹🇭 Thai Food</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Taiwanese Food" id="c-taiwanese">
+            <label for="c-taiwanese">🇹🇼 Taiwanese Food</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Vietnamese Food" id="c-vietnamese">
+            <label for="c-vietnamese">🇻🇳 Vietnamese Food</label>
+            <span class="filter-count">0</span>
+          </div>
+          <div class="filter-item">
+            <input type="checkbox" class="filter-category" value="Chinese Food" id="c-chinese">
+            <label for="c-chinese">🇨🇳 Chinese Food</label>
+            <span class="filter-count">0</span>
+          </div>
+        </div>
+
+        <!-- Price Filter -->
+        <div class="filter-group">
+          <h4 data-lang="filter_price">가격</h4>
+          <div class="price-range-inputs">
+            <input type="number" id="min-price" placeholder="Min $" min="0" step="0.01">
+            <input type="number" id="max-price" placeholder="Max $" min="0" step="0.01">
+          </div>
+          <button class="filter-apply-btn" id="filter-apply" data-lang="apply">적용</button>
+        </div>
+      </aside>
+
+      <!-- SHOP MAIN -->
+      <div class="shop-main">
+        <div class="shop-toolbar">
+          <span class="results-count" id="results-count">Loading...</span>
+          <div class="shop-search">
+            <span>🔍</span>
+            <input type="text" id="shop-search-input" placeholder="Search products...">
+          </div>
+          <select class="sort-select" id="sort-select">
+            <option value="bestseller" data-lang="sort_best">베스트셀러</option>
+            <option value="new" data-lang="sort_new">신상품순</option>
+            <option value="price_asc" data-lang="sort_low">낮은 가격순</option>
+            <option value="price_desc" data-lang="sort_high">높은 가격순</option>
+          </select>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid" id="shop-grid">
+          <div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-muted)">Loading products...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">SAY<span style="background:#0D2DBD;color:white;">WEE</span></div>
+        <p data-lang="footer_about">세이위는 7개국 최고의 아시아 식품을 한 곳에서 만날 수 있는 프리미엄 마켓플레이스입니다.</p>
+        <div class="social-links">
+          <a href="#" class="social-link">📘</a>
+          <a href="#" class="social-link">📸</a>
+          <a href="#" class="social-link">🐦</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_shop">쇼핑</h4>
+        <ul>
+          <li><a href="shop.html">All Products</a></li>
+          <li><a href="shop.html?sort=bestseller">Best Sellers</a></li>
+          <li><a href="shop.html?sort=new">New Arrivals</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_company">회사</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="footer_support">고객지원</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-lang="footer_copyright">© 2025 SAYWEE. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/language.js"></script>
+<script src="js/products.js"></script>
+<script src="js/script.js"></script>
+<script src="js/images.js"></script>
+
+<script>
+// Patch product card images with real Unsplash photos after render
+document.addEventListener('productsRendered', function() {
+  document.querySelectorAll('[data-product-id], .product-card[data-id]').forEach(function(card) {
+    const pid = card.dataset.productId || card.dataset.id;
+    if (!pid) return;
+    const img = card.querySelector('.product-card-img img');
+    if (img && PRODUCT_IMAGES && PRODUCT_IMAGES[pid]) {
+      img.src = PRODUCT_IMAGES[pid].main;
+      img.onerror = function() { this.src = DEFAULT_PRODUCT_IMAGE; };
+    }
+  });
+});
+// Also run after a short delay as fallback
+setTimeout(function() {
+  document.querySelectorAll('.product-card').forEach(function(card) {
+    const pid = card.dataset.productId || card.dataset.id || card.getAttribute('onclick')?.match(/'([a-z]{2}\d{3})'/)?.[1];
+    if (!pid || !PRODUCT_IMAGES) return;
+    const img = card.querySelector('img');
+    if (img && img.src.includes('svg') && PRODUCT_IMAGES[pid]) {
+      img.src = PRODUCT_IMAGES[pid].main;
+    }
+  });
+}, 1200);
+</script>
+
+</body>
+</html>
